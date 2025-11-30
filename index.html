@@ -125,18 +125,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
   (function(){
-    emailjs.init("2WkxcVwk1FHP0Sgyh"); // ← Paste your EmailJS Public Key here
+    emailjs.init("YOUR_PUBLIC_KEY_HERE"); // ← Your existing Public Key
   })();
 
   document.getElementById('waitlist-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
+    const userEmail = this.email.value.trim();
+
+    // Send notification to YOU
     emailjs.sendForm('service_57k6qhf', 'template_70u9yvd', this)
       .then(() => {
-        this.classList.add('hidden');
-        document.getElementById('success-message').classList.remove('hidden');
+        // Send confirmation to THE USER
+        emailjs.send('YOUR_SERVICE_ID', 'template_23grork', {
+          to_email: userEmail,
+          to_name: userEmail.split('@')[0] // optional, personalises if you want
+        })
+        .then(() => {
+          this.classList.add('hidden');
+          document.getElementById('success-message').classList.remove('hidden');
+        });
       }, (error) => {
-        alert('Something went wrong... DM @CutVibe on X instead 👀');
+        alert('Something went wrong — DM @CutVibe on X with your email and I’ll add you manually 👀');
         console.log(error);
       });
   });
