@@ -5,81 +5,272 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VibeCut</title>
     <meta name="description" content="Direct the vibe. Make the cut." />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      :root { --cyan: #00f5ff; --dark: #0a0a0a; }
-      * { margin:0; padding:0; box-sizing:border-box; }
+      :root {
+        --cyan: #00f5ff;
+        --dark: #050608;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        background: var(--dark);
+        background: radial-gradient(circle at top, #071621 0, #020308 55%, #000000 100%);
         color: white;
-        font-family: 'Instrument Sans', sans-serif;
+        font-family: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont,
+          'Segoe UI', sans-serif;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         overflow-y: auto;
       }
+
+      .hidden {
+        display: none;
+      }
+
       .grid-bg {
         position: fixed;
         inset: 0;
         background-image:
-          linear-gradient(var(--cyan) 0.5px, transparent 0.5px),
-          linear-gradient(90deg, var(--cyan) 0.5px, transparent 0.5px);
+          linear-gradient(var(--cyan) 0.6px, transparent 0.6px),
+          linear-gradient(90deg, var(--cyan) 0.6px, transparent 0.6px);
         background-size: 80px 80px;
-        opacity: 0.03; /* lowered */
-        animation: grid 60s linear infinite; /* slowed */
+        opacity: 0.03;
         pointer-events: none;
         z-index: 0;
+        transform: translateZ(0);
       }
-      @keyframes grid { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-      @keyframes glow { 0% { text-shadow: 0 0 30px rgba(0,245,255,0.5); } 100% { text-shadow: 0 0 60px rgba(0,245,255,0.9), 0 0 90px rgba(0,245,255,0.5); } }
-      @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-      main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4rem 1rem; position: relative; z-index: 10; }
-      .logo { width: 180px; height: 180px; animation: float 8s ease-in-out infinite; } /* slightly slower */
-      h1 { font-size: 5.5rem; font-weight: 700; animation: glow 4s ease-in-out infinite alternate; margin: 2rem 0 1rem; } /* slower glow */
-      .tagline { font-size: 1.9rem; color: var(--cyan); opacity: 0.95; margin-bottom: 1rem; }
-      .sub { font-size: 1.25rem; color: #666; margin-bottom: 3rem; }
-      form { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 420px; }
+
+      /* Only animate the grid for users who haven't requested reduced motion */
+      @media (prefers-reduced-motion: no-preference) {
+        .grid-bg {
+          animation: grid 120s linear infinite;
+        }
+
+        @keyframes grid {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(-40%);
+          }
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-14px);
+        }
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 4rem 1rem 3rem;
+        position: relative;
+        z-index: 10;
+        text-align: center;
+      }
+
+      .logo {
+        width: 180px;
+        height: 180px;
+        animation: float 10s ease-in-out infinite;
+        will-change: transform;
+        filter: drop-shadow(0 0 24px rgba(0, 245, 255, 0.45));
+      }
+
+      h1 {
+        font-size: 5rem;
+        font-weight: 700;
+        margin: 2rem 0 1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-shadow:
+          0 0 28px rgba(0, 245, 255, 0.55),
+          0 0 60px rgba(0, 245, 255, 0.35);
+      }
+
+      .tagline {
+        font-size: 1.9rem;
+        color: var(--cyan);
+        opacity: 0.96;
+        margin-bottom: 0.75rem;
+      }
+
+      .sub {
+        font-size: 1.1rem;
+        color: #9ca3af;
+        margin-bottom: 2.4rem;
+      }
+
+      .card {
+        max-width: 480px;
+        width: 100%;
+        padding: 2rem 2.25rem 2.25rem;
+        border-radius: 1.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.86))
+          border-box;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.7),
+          0 0 50px rgba(0, 245, 255, 0.12);
+        backdrop-filter: blur(4px);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .field-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        align-items: flex-start;
+      }
+
+      label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #9ca3af;
+      }
+
       input {
-        padding: 1.4rem 2rem;
+        width: 100%;
+        padding: 1.1rem 1.3rem;
         border-radius: 9999px;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: rgba(255,255,255,0.05);
-        backdrop-filter: blur(12px);
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.9);
         color: white;
-        font-size: 1.1rem;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
+          transform 0.1s ease;
       }
-      input::placeholder { color: rgba(255,255,255,0.4); }
+
+      input::placeholder {
+        color: rgba(148, 163, 184, 0.8);
+      }
+
+      input:focus {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 1px rgba(0, 245, 255, 0.3), 0 0 28px rgba(0, 245, 255, 0.28);
+        background: rgba(15, 23, 42, 0.98);
+        transform: translateY(-1px);
+      }
+
       button {
-        padding: 1.4rem 3rem;
+        padding: 1.15rem 1.5rem;
         border-radius: 9999px;
-        background: var(--cyan);
-        color: black;
+        border: none;
+        background: radial-gradient(circle at 20% 0, #e0ffff, #00f5ff);
+        color: #020617;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 1rem;
         cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: 0 0 40px rgba(0,245,255,0.4);
+        transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+        box-shadow:
+          0 16px 40px rgba(0, 245, 255, 0.32),
+          0 0 25px rgba(0, 245, 255, 0.55);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
-      button:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(0,245,255,0.6); }
+
+      button:hover {
+        transform: translateY(-1px) scale(1.02);
+        box-shadow:
+          0 20px 50px rgba(0, 245, 255, 0.4),
+          0 0 40px rgba(0, 245, 255, 0.7);
+        filter: brightness(1.04);
+      }
+
+      button:active {
+        transform: translateY(0) scale(0.99);
+        box-shadow:
+          0 10px 24px rgba(0, 245, 255, 0.3),
+          0 0 25px rgba(0, 245, 255, 0.6);
+      }
+
       .success {
         color: var(--cyan);
-        font-size: 1.8rem;
+        font-size: 1.25rem;
         font-weight: 600;
-        animation: glow 4s ease-in-out infinite alternate;
-        margin-top: 2rem;
-      }
-      footer {
-        padding: 2rem;
+        margin-top: 1.6rem;
         text-align: center;
-        color: #666;
+        text-shadow: 0 0 22px rgba(0, 245, 255, 0.6);
+      }
+
+      .success span {
+        opacity: 0.7;
+        display: block;
         font-size: 0.9rem;
+        margin-top: 0.4rem;
+      }
+
+      footer {
+        padding: 1.8rem 1rem 2.2rem;
+        text-align: center;
+        color: #6b7280;
+        font-size: 0.85rem;
         z-index: 10;
       }
-      footer a { color: var(--cyan); text-decoration: none; }
+
+      footer a {
+        color: var(--cyan);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+
       @media (max-width: 640px) {
-        h1 { font-size: 4rem; }
-        .tagline { font-size: 1.6rem; }
-        .logo { width: 140px; height: 140px; }
+        main {
+          padding-top: 3.5rem;
+        }
+
+        .logo {
+          width: 140px;
+          height: 140px;
+        }
+
+        h1 {
+          font-size: 3.6rem;
+          letter-spacing: 0.06em;
+        }
+
+        .tagline {
+          font-size: 1.4rem;
+        }
+
+        .sub {
+          font-size: 0.98rem;
+          margin-bottom: 1.8rem;
+        }
+
+        .card {
+          padding: 1.7rem 1.4rem 1.9rem;
+          border-radius: 1.4rem;
+        }
       }
     </style>
   </head>
@@ -88,48 +279,73 @@
 
     <main>
       <img src="/logo.svg" alt="VibeCut" class="logo" />
-      
+
       <h1>VibeCut</h1>
       <p class="tagline">Direct the vibe. Make the cut.</p>
-      <p class="sub">Something neat is loading.</p>
+      <p class="sub">The director-first AI video studio is almost ready.</p>
 
-      <form id="waitlist-form">
-        <input type="email" name="email" required placeholder="your@email.com" />
-        <button type="submit">Get Early Access</button>
-      </form>
+      <div class="card">
+        <form id="waitlist-form">
+          <div class="field-wrap">
+            <label for="email">Early access waitlist</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder="you@getthecut.com"
+            />
+          </div>
 
-      <div id="success-message" class="success hidden">
-        You’re in. Now wait for the cut.
+          <button type="submit">Get Early Access</button>
+        </form>
+
+        <div id="success-message" class="success hidden">
+          You’re in. Now wait for the cut.
+          <span>We’ll email you when the first build is live.</span>
+        </div>
       </div>
     </main>
 
     <footer>
-      © 2025 VibeCut • <a href="https://x.com/CutVibe" target="_blank">@CutVibe</a>
+      © 2025 VibeCut •
+      <a href="https://x.com/CutVibe" target="_blank" rel="noreferrer">@CutVibe</a>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
-      (function(){
-        emailjs.init("2WkxcVwk1FHP0Sgyh");
+      (function () {
+        emailjs.init('2WkxcVwk1FHP0Sgyh');
       })();
 
-      document.getElementById('waitlist-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const userEmail = this.email.value.trim();
+      const form = document.getElementById('waitlist-form');
+      const successEl = document.getElementById('success-message');
 
-        emailjs.sendForm('service_57k6qhf', 'template_70u9yvd', this)
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const userEmail = this.email.value.trim();
+        if (!userEmail) return;
+
+        emailjs
+          .sendForm('service_57k6qhf', 'template_70u9yvd', this)
           .then(() => {
-            emailjs.send('service_57k6qhf', 'template_iarwp0d', {
-              to_email: userEmail,
-              to_name: userEmail.split('@')[0],
-            }).catch(() => {});
+            // fire-and-forget confirmation email
+            emailjs
+              .send('service_57k6qhf', 'template_iarwp0d', {
+                to_email: userEmail,
+                to_name: userEmail.split('@')[0],
+              })
+              .catch(() => {});
 
             this.classList.add('hidden');
-            document.getElementById('success-message').classList.remove('hidden');
+            successEl.classList.remove('hidden');
           })
           .catch(() => {
-            alert('Something went wrong — DM @CutVibe on X with your email and I’ll add you manually 👀');
+            alert(
+              'Something went wrong — DM @CutVibe on X with your email and I’ll add you manually.'
+            );
           });
       });
     </script>
