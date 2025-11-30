@@ -125,7 +125,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
   (function(){
-    emailjs.init("YOUR_PUBLIC_KEY_HERE"); // ← Your existing Public Key
+    emailjs.init("2WkxcVwk1FHP0Sgyh"); // ← Your existing Public Key
   })();
 
   document.getElementById('waitlist-form').addEventListener('submit', function(e) {
@@ -137,7 +137,7 @@
     emailjs.sendForm('service_57k6qhf', 'template_70u9yvd', this)
       .then(() => {
         // Send confirmation to THE USER
-        emailjs.send('YOUR_SERVICE_ID', 'template_23grork', {
+        emailjs.send('service_57k6qhf', 'template_23grork', {
           to_email: userEmail,
           to_name: userEmail.split('@')[0] // optional, personalises if you want
         })
