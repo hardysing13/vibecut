@@ -107,14 +107,24 @@
       <p class="tagline">Direct the vibe. Make the cut.</p>
       <p class="sub">Something neat is loading.</p>
 
-      <form id="waitlist-form">
-        <input type="email" required placeholder="your@email.com" />
-        <button type="submit">Get Early Access</button>
-      </form>
+      <form id="waitlist-form" action="https://formsubmit.co/vibecut.design@gmail.com" method="POST">
+  <input 
+    type="email" 
+    name="email" 
+    required 
+    placeholder="your@email.com" 
+    class="w-full"
+  />
+  <input type="hidden" name="_subject" value="New VibeCut Waitlist Signup!" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_next" value="https://vibecut.design?success=1" />
+  <button type="submit">Get Early Access</button>
+</form>
 
-      <div id="success-message" class="success hidden">
-        You’re in. Now wait for the cut.
-      </div>
+<!-- Success message (now triggered by URL param too) -->
+<div id="success-message" class="success hidden">
+  You’re in. Now wait for the cut.
+</div>
     </main>
 
     <footer>
