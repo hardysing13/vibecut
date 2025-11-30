@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VibeCut</title>
+    <meta name="description" content="Direct the vibe. Make the cut." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --cyan: #00f5ff;
+        --dark: #0a0a0a;
+      }
+      body {
+        margin: 0;
+        background: var(--dark);
+        color: white;
+        font-family: 'Instrument Sans', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+      }
+      body::before {
+        content: absolute;
+        inset: 0;
+        background-image: 
+          linear-gradient(var(--cyan) 0.5px, transparent 0.5px),
+          linear-gradient(90deg, var(--cyan) 0.5px, transparent 0.5px);
+        background-size: 80px 80px;
+        opacity: 0.04;
+        animation: grid 40s linear infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+      @keyframes grid {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+      }
+      @keyframes glow {
+        0% { text-shadow: 0 0 20px rgba(0,245,255,0.4); }
+        100% { text-shadow: 0 0 40px rgba(0,245,255,0.8), 0 0 60px rgba(0,245,255,0.4); }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+      }
+      .godray {
+        position: absolute;
+        inset: 0;
+        opacity: 0.2;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 0%, var(--cyan) 0%, transparent 70%);
+        filter: blur(80px);
+      }
+      h1 { 
+        font-size: 4.5rem; 
+        font-weight: 700; 
+        animation: glow 3s ease-in-out infinite alternate;
+      }
+      p.tagline {
+        font-size: 1.75rem;
+        color: var(--cyan);
+        opacity: 0.9;
+      }
+      .btn {
+        background: var(--cyan);
+        color: black;
+        padding: 1.25rem 3rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 1.125rem;
+        transition: all 0.3s;
+        box-shadow: 0 0 30px rgba(0,245,255,0.3);
+      }
+      .btn:hover {
+        background: var(--cyan);
+        transform: scale(1.05);
+      }
+      input {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        backdrop-filter: blur(12px);
+        padding: 1.25rem 2rem;
+        border-radius: 9999px;
+        color: white;
+        width: 100%;
+      }
+      input::placeholder {
+        color: rgba(255,255,255,0.4);
+      }
+      .success {
+        color: var(--cyan);
+        font-size: 1.5rem;
+        animation: glow 3s ease-in-out infinite alternate;
+      }
+      footer {
+        position: absolute;
+        bottom: 2rem;
+        font-size: 0.875rem;
+        color: #666;
+      }
+      footer a {
+        color: var(--cyan);
+      }
+      @media (max-width: 640px) {
+        h1 { font-size: 3.5rem; }
+        .tagline { font-size: 1.5rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="godray"></div>
+
+    <main class="z-10 text-center px-8">
+      <img 
+        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDIwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAwTDIwMCAyNTBIMCBMMTAwIDBaIiBmaWxsPSIjMDBmNWZmIiBvcGFjaXR5PSIwLjgiLz48cGF0aCBkPSJNMTAwIDAgTDIwMCAyNTBIMTAwVjBaIiBmaWxsPSJ1cmwoI2cpIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIyNSUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZjVmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwYTFmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjwvc3ZnPg==" 
+        alt="VibeCut Logo" 
+        class="w-48 h-48 mx-auto mb-12 animate-float"
+      />
+
+      <h1>VibeCut</h1>
+      <p class="tagline mb-4">Direct the vibe. Make the cut.</p>
+      <p class="text-lg text-gray-400 mb-16 max-w-2xl mx-auto">Something neat is loading.</p>
+
+      <form id="waitlist-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto justify-center items-center">
+        <input type="email" required placeholder="your@email.com" />
+        <button type="submit" class="btn">Get Early Access</button>
+      </form>
+
+      <div id="success-message" class="success hidden mt-12">
+        You’re in. Now wait for the cut.
+      </div>
+    </main>
+
+    <footer class="z-10">
+      © 2025 VibeCut • <a href="https://x.com/CutVibe" target="_blank">@CutVibe</a>
+    </footer>
+
+    <script>
+      document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = this.querySelector('input').value;
+        if (email) {
+          console.log('Waitlist:', email); // Replace with real backend later
+          this.classList.add('hidden');
+          document.getElementById('success-message').classList.remove('hidden');
+        }
+      });
+    </script>
+  </body>
+</html>
