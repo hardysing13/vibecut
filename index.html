@@ -5,28 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VibeCut</title>
     <meta name="description" content="Direct the vibe. Make the cut." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
     <style>
-      :root {
-        --cyan: #00f5ff;
-        --dark: #0a0a0a;
-      }
+      :root { --cyan: #00f5ff; --dark: #0a0a0a; }
+      * { margin:0; padding:0; box-sizing:border-box; }
       body {
-        margin: 0;
         background: var(--dark);
         color: white;
         font-family: 'Instrument Sans', sans-serif;
         min-height: 100vh;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        position: relative;
+        flex-direction: column;
+        overflow-y: auto; /* ← THIS FIXES SCROLL */
       }
-      body::before {
-        content: absolute;
+      .grid-bg {
+        position: fixed;
         inset: 0;
         background-image: 
           linear-gradient(var(--cyan) 0.5px, transparent 0.5px),
@@ -37,116 +30,103 @@
         pointer-events: none;
         z-index: 0;
       }
-      @keyframes grid {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-50%); }
-      }
-      @keyframes glow {
-        0% { text-shadow: 0 0 20px rgba(0,245,255,0.4); }
-        100% { text-shadow: 0 0 40px rgba(0,245,255,0.8), 0 0 60px rgba(0,245,255,0.4); }
-      }
-      @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-      }
+      @keyframes grid { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+      @keyframes glow { 0% { text-shadow: 0 0 30px rgba(0,245,255,0.5); } 100% { text-shadow: 0 0 60px rgba(0,245,255,0.9), 0 0 90px rgba(0,245,255,0.5); } }
+      @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
       .godray {
-        position: absolute;
-        inset: 0;
-        opacity: 0.2;
+        position: fixed;
+        top: -50%;
+        left: 50%;
+        width: 120vw;
+        height: 120vh;
+        transform: translateX(-50%);
+        background: radial-gradient(circle, rgba(0,245,255,0.15) 0%, transparent 60%);
+        filter: blur(100px);
+        opacity: 0.4;
         pointer-events: none;
-        background: radial-gradient(circle at 50% 0%, var(--cyan) 0%, transparent 70%);
-        filter: blur(80px);
+        z-index: 0;
       }
-      h1 { 
-        font-size: 4.5rem; 
-        font-weight: 700; 
-        animation: glow 3s ease-in-out infinite alternate;
+      main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4rem 1rem; position: relative; z-index: 10; }
+      .logo { width: 180px; height: 180px; animation: float 6s ease-in-out infinite; }
+      h1 { font-size: 5.5rem; font-weight: 700; animation: glow 3s ease-in-out infinite alternate; margin: 2rem 0 1rem; }
+      .tagline { font-size: 1.9rem; color: var(--cyan); opacity: 0.95; margin-bottom: 1rem; }
+      .sub { font-size: 1.25rem; color: #666; margin-bottom: 3rem; }
+      form { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 420px; }
+      input {
+        padding: 1.4rem 2rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(12px);
+        color: white;
+        font-size: 1.1rem;
       }
-      p.tagline {
-        font-size: 1.75rem;
-        color: var(--cyan);
-        opacity: 0.9;
-      }
-      .btn {
+      input::placeholder { color: rgba(255,255,255,0.4); }
+      button {
+        padding: 1.4rem 3rem;
+        border-radius: 9999px;
         background: var(--cyan);
         color: black;
-        padding: 1.25rem 3rem;
-        border-radius: 9999px;
         font-weight: 600;
-        font-size: 1.125rem;
+        font-size: 1.1rem;
+        cursor: pointer;
         transition: all 0.3s;
-        box-shadow: 0 0 30px rgba(0,245,255,0.3);
+        box-shadow: 0 0 40px rgba(0,245,255,0.4);
       }
-      .btn:hover {
-        background: var(--cyan);
-        transform: scale(1.05);
-      }
-      input {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        backdrop-filter: blur(12px);
-        padding: 1.25rem 2rem;
-        border-radius: 9999px;
-        color: white;
-        width: 100%;
-      }
-      input::placeholder {
-        color: rgba(255,255,255,0.4);
-      }
+      button:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(0,245,255,0.6); }
       .success {
         color: var(--cyan);
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 600;
         animation: glow 3s ease-in-out infinite alternate;
+        margin-top: 2rem;
       }
       footer {
-        position: absolute;
-        bottom: 2rem;
-        font-size: 0.875rem;
+        padding: 2rem;
+        text-align: center;
         color: #666;
+        font-size: 0.9rem;
+        z-index: 10;
       }
-      footer a {
-        color: var(--cyan);
-      }
+      footer a { color: var(--cyan); text-decoration: none; }
       @media (max-width: 640px) {
-        h1 { font-size: 3.5rem; }
-        .tagline { font-size: 1.5rem; }
+        h1 { font-size: 4rem; }
+        .tagline { font-size: 1.6rem; }
+        .logo { width: 140px; height: 140px; }
       }
     </style>
   </head>
   <body>
+    <div class="grid-bg"></div>
     <div class="godray"></div>
 
-    <main class="z-10 text-center px-8">
-      <img 
-        src="/logo.svg" 
-        alt="VibeCut" 
-        class="w-48 h-48 mx-auto mb-12 animate-float"
-      />
-
+    <main>
+      <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDIwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwMCAwTDIwMCAyNTBIMCBMMTAwIDBaIiBmaWxsPSIjMDBmNWZmIiBvcGFjaXR5PSIwLjgiLz48cGF0aCBkPSJNMTAwIDAgTDIwMCAyNTBIMTAwVjBaIiBmaWxsPSJ1cmwoI2cpIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIyNSUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZjVmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwYTFmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjwvc3ZnPg==" alt="VibeCut" class="logo" />
+      
       <h1>VibeCut</h1>
-      <p class="tagline mb-4">Direct the vibe. Make the cut.</p>
-      <p class="text-lg text-gray-400 mb-16 max-w-2xl mx-auto">Something neat is loading.</p>
+      <p class="tagline">Direct the vibe. Make the cut.</p>
+      <p class="sub">Something neat is loading.</p>
 
-      <form id="waitlist-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto justify-center items-center">
+      <form id="waitlist-form">
         <input type="email" required placeholder="your@email.com" />
-        <button type="submit" class="btn">Get Early Access</button>
+        <button type="submit">Get Early Access</button>
       </form>
 
-      <div id="success-message" class="success hidden mt-12">
+      <div id="success-message" class="success hidden">
         You’re in. Now wait for the cut.
       </div>
     </main>
 
-    <footer class="z-10">
-      ©2025 VibeCut • <a href="https://x.com/CutVibe" target="_blank">@CutVibe</a>
+    <footer>
+      © 2025 VibeCut • <a href="https://x.com/CutVibe" target="_blank">@CutVibe</a>
     </footer>
 
     <script>
       document.getElementById('waitlist-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = this.querySelector('input').value;
+        const email = this.querySelector('input').value.trim();
         if (email) {
-          console.log('Waitlist:', email); // Replace with real backend later
+          console.log('Waitlist:', email);
           this.classList.add('hidden');
           document.getElementById('success-message').classList.remove('hidden');
         }
