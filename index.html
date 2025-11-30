@@ -115,13 +115,13 @@
     placeholder="your@email.com" 
     class="w-full"
   />
-  <input type="hidden" name="_subject" value="New VibeCut Waitlist Signup!" />
+  <input type="hidden" name="_subject" value="New VibeCut Waitlist Signup! 🎬" />
+  <input type="hidden" name="_honeypot" style="display:none" /> <!-- anti-spam -->
   <input type="hidden" name="_captcha" value="false" />
-  <input type="hidden" name="_next" value="https://vibecut.design?success=1" />
+  <input type="hidden" name="_next" value="https://vibecut.design/?cut=1" />
   <button type="submit">Get Early Access</button>
 </form>
 
-<!-- Success message (now triggered by URL param too) -->
 <div id="success-message" class="success hidden">
   You’re in. Now wait for the cut.
 </div>
