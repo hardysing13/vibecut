@@ -107,18 +107,14 @@
       <p class="tagline">Direct the vibe. Make the cut.</p>
       <p class="sub">Something neat is loading.</p>
 
-      <form id="waitlist-form" action="https://formsubmit.co/vibecut.design@gmail.com" method="POST">
-  <input 
-    type="email" 
-    name="email" 
-    required 
-    placeholder="your@email.com" 
-    class="w-full"
-  />
-  <input type="hidden" name="_subject" value="New VibeCut Waitlist Signup! 🎬" />
-  <input type="hidden" name="_honeypot" style="display:none" /> <!-- anti-spam -->
-  <input type="hidden" name="_captcha" value="false" />
-  <input type="hidden" name="_next" value="https://vibecut.design/?cut=1" />
+      <form action="https://api.web3forms.com/submit" method="POST" id="waitlist-form">
+  <input type="hidden" name="access_key" value="PASTE-YOUR-KEY-HERE" />
+  <input type="hidden" name="subject" value="New VibeCut Waitlist Signup! 🎬" />
+  <input type="hidden" name="from_name" value="VibeCut Waitlist" />
+  <input type="email" name="email" required placeholder="your@email.com" />
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+  <input type="hidden" name="redirect" value="https://vibecut.design/?cut=1" />
+
   <button type="submit">Get Early Access</button>
 </form>
 
