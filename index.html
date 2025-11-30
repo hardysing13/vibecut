@@ -107,20 +107,40 @@
       <p class="tagline">Direct the vibe. Make the cut.</p>
       <p class="sub">Something neat is loading.</p>
 
-      <form action="https://api.web3forms.com/submit" method="POST" id="waitlist-form">
-  <input type="hidden" name="access_key" value="PASTE-YOUR-KEY-HERE" />
-  <input type="hidden" name="subject" value="New VibeCut Waitlist Signup! 🎬" />
-  <input type="hidden" name="from_name" value="VibeCut Waitlist" />
-  <input type="email" name="email" required placeholder="your@email.com" />
-  <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
-  <input type="hidden" name="redirect" value="https://vibecut.design/?cut=1" />
-
+      <form id="waitlist-form">
+  <input 
+    type="email" 
+    name="email" 
+    required 
+    placeholder="your@email.com"
+    class="w-full"
+  />
   <button type="submit">Get Early Access</button>
 </form>
 
 <div id="success-message" class="success hidden">
   You’re in. Now wait for the cut.
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("2WkxcVwk1FHP0Sgyh"); // ← Paste your EmailJS Public Key here
+  })();
+
+  document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    emailjs.sendForm('service_57k6qhf', 'template_70u9yvd', this)
+      .then(() => {
+        this.classList.add('hidden');
+        document.getElementById('success-message').classList.remove('hidden');
+      }, (error) => {
+        alert('Something went wrong... DM @CutVibe on X instead 👀');
+        console.log(error);
+      });
+  });
+</script>
     </main>
 
     <footer>
