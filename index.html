@@ -1,487 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>VibeCut — Direct the vibe. Make the cut.</title>
-    <meta
-      name="description"
-      content="VibeCut is the director-first AI video studio. Shape the vibe, lock timing, and ship story-driven cuts without touching a timeline."
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Lightweight brand font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VibeCut — Direct the vibe. Make the cut.</title>
+  <meta name="description" content="VibeCut is the director-first AI video studio. No timelines. Just taste." />
 
-    <style>
-      :root {
-        --bg: #020617;
-        --bg-soft: #020c1a;
-        --bg-card: #020b16;
-        --border-subtle: #1e293b;
-        --cyan: #00f5ff;
-        --cyan-soft: #38e9ff;
-        --text-main: #e5e7eb;
-        --text-muted: #94a3b8;
-        --accent: #22d3ee;
-        --accent-soft: #38bdf8;
+  <!-- Open Graph Preview (WhatsApp, Twitter, LinkedIn, iMessage) -->
+  <meta property="og:title" content="VibeCut — Direct the vibe. Make the cut." />
+  <meta property="og:description" content="The director-first AI video studio. No timelines. Just taste." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vibecut.design/" />
+  <meta property="og:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VibeCut — Direct the vibe. Make the cut." />
+  <meta name="twitter:description" content="The director-first AI video studio. No timelines. Just taste." />
+  <meta name="twitter:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --cyan: #00f5ff;
+      --dark: #04070b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Instrument Sans', sans-serif;
+      background: radial-gradient(circle at center, #08121c 0%, #02060a 80%, #000 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    /* Inline Safe SVG Logo */
+    .logo {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo svg {
+      width: 90px;
+      height: 90px;
+      display: block;
+    }
+
+    .hero h1 {
+      font-size: 5.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff, #a0faff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: glow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
       }
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      to {
+        text-shadow: 0 0 60px rgba(0, 245, 255, 0.9);
       }
+    }
 
-      body {
-        min-height: 100vh;
-        font-family: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        color: var(--text-main);
-        background: radial-gradient(circle at top, #041527 0%, #020617 55%, #000 100%);
+    .tagline {
+      margin-top: 1rem;
+      font-size: 1.7rem;
+      color: var(--cyan);
+      font-weight: 500;
+    }
+
+    .sub {
+      margin-top: 1.2rem;
+      font-size: 1.2rem;
+      color: #9aa3ad;
+    }
+
+    /* Teaser cards */
+    .cards {
+      max-width: 900px;
+      margin: 3rem auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
+
+    @media (min-width: 750px) {
+      .cards {
+        grid-template-columns: 1fr 1fr 1fr;
       }
+    }
 
-      .hidden {
-        display: none;
-      }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.6rem;
+      backdrop-filter: blur(10px);
+      transition: all .25s ease;
+    }
 
-      .page {
-        max-width: 1040px;
-        margin: 0 auto;
-        padding: 1.75rem 1.5rem 2.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 2.5rem;
-      }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 245, 255, 0.25);
+      box-shadow: 0 0 25px rgba(0, 245, 255, 0.15);
+    }
 
-      /* ---------- Header ---------- */
+    h3 {
+      font-size: 1.25rem;
+      margin-bottom: .6rem;
+      color: var(--cyan);
+    }
 
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
+    p {
+      font-size: 1rem;
+      line-height: 1.45;
+      color: #cdd3d8;
+    }
 
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-      }
+    /* Waitlist */
+    #waitlist-form {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 420px;
+      width: 100%;
+    }
 
-      /* Safe inline SVG logo container */
-      .brand-mark {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .brand-mark svg {
-        display: block;
-      }
+    input {
+      padding: 1.1rem 1.4rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      font-size: 1.05rem;
+      color: white;
+    }
 
-      .brand-text {
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-      }
+    button {
+      padding: 1.1rem 1.6rem;
+      border-radius: 9999px;
+      background: var(--cyan);
+      color: black;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: none;
+      transition: .25s;
+    }
 
-      .chip {
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.34);
-        padding: 0.4rem 0.8rem;
-        font-size: 0.78rem;
-        color: var(--text-muted);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        background: rgba(15, 23, 42, 0.74);
-      }
+    button:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 30px rgba(0, 245, 255, .45);
+    }
 
-      .chip-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 999px;
-        background: var(--cyan);
-        box-shadow: 0 0 8px rgba(34, 211, 238, 0.85);
-      }
+    .success {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      color: var(--cyan);
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
 
-      /* ---------- Layout ---------- */
+    footer {
+      margin-top: 4rem;
+      font-size: .85rem;
+      color: #6f7782;
+      text-align: center;
+    }
 
-      main {
-        display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
-        gap: 2.5rem;
-        align-items: center;
-      }
+    footer a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+  </style>
+</head>
 
-      @media (max-width: 880px) {
-        main {
-          grid-template-columns: minmax(0, 1fr);
-        }
-      }
-
-      /* ---------- Hero copy ---------- */
-
-      .hero-kicker {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: var(--accent);
-        margin-bottom: 0.9rem;
-      }
-
-      .hero-title {
-        font-size: clamp(3.4rem, 6vw, 5.8rem);
-        font-weight: 700;
-        line-height: 1.02;
-        margin-bottom: 0.85rem;
-        background: linear-gradient(90deg, #ffffff, #a0faff);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        animation: glow 4s ease-in-out infinite alternate;
-      }
-
-      .hero-title span {
-        color: inherit; /* gradient applies to entire text */
-      }
-
-      @keyframes glow {
-        from {
-          text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
-        }
-        to {
-          text-shadow: 0 0 60px rgba(0, 245, 255, 0.9);
-        }
-      }
-
-      .hero-sub {
-        font-size: 1.02rem;
-        color: var(--text-muted);
-        max-width: 34rem;
-        margin-bottom: 1.75rem;
-      }
-
-      .hero-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 2rem;
-      }
-
-      .pill {
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        padding: 0.35rem 0.8rem;
-        font-size: 0.78rem;
-        color: var(--text-muted);
-      }
-
-      .pill-strong {
-        border-color: rgba(34, 211, 238, 0.75);
-        color: var(--cyan-soft);
-        background: rgba(8, 47, 73, 0.7);
-      }
-
-      /* ---------- Vibe strip ---------- */
-
-      .vibe-strip {
-        display: flex;
-        gap: 0.6rem;
-        align-items: center;
-        font-size: 0.78rem;
-        color: var(--text-muted);
-      }
-
-      .vibe-bar {
-        flex: 1;
-        height: 6px;
-        border-radius: 999px;
-        background: linear-gradient(
-          90deg,
-          rgba(148, 163, 184, 0.65),
-          var(--accent),
-          var(--cyan),
-          var(--accent-soft)
-        );
-        position: relative;
-        overflow: hidden;
-      }
-
-      .vibe-marker {
-        position: absolute;
-        top: 50%;
-        width: 16px;
-        height: 16px;
-        border-radius: 999px;
-        border: 2px solid #020617;
-        background: #e0faff;
-        transform: translate(58%, -50%);
-        box-shadow: 0 0 12px rgba(34, 211, 238, 0.9);
-      }
-
-      @media (prefers-reduced-motion: no-preference) {
-        .vibe-marker {
-          animation: glide 3.6s ease-in-out infinite alternate;
-        }
-
-        @keyframes glide {
-          from {
-            transform: translate(10%, -50%);
-          }
-          to {
-            transform: translate(80%, -50%);
-          }
-        }
-      }
-
-      /* ---------- Waitlist Card ---------- */
-
-      .card {
-        border-radius: 1.35rem;
-        border: 1px solid rgba(148, 163, 184, 0.32);
-        background: radial-gradient(circle at top, #020c1a, #020617);
-        padding: 1.6rem 1.7rem 1.9rem;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.85);
-      }
-
-      .card-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 0.4rem;
-      }
-
-      .card-sub {
-        font-size: 0.88rem;
-        color: var(--text-muted);
-        margin-bottom: 1.2rem;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 0.85rem;
-      }
-
-      input[type="email"] {
-        width: 100%;
-        padding: 0.9rem 1rem;
-        border-radius: 999px;
-        border: 1px solid var(--border-subtle);
-        background: #020617;
-        color: var(--text-main);
-        font-size: 0.95rem;
-        outline: none;
-      }
-
-      input:focus {
-        border-color: var(--cyan);
-      }
-
-      button {
-        margin-top: 0.2rem;
-        border: none;
-        border-radius: 999px;
-        padding: 0.9rem 1rem;
-        font-size: 0.92rem;
-        font-weight: 600;
-        cursor: pointer;
-        color: #020617;
-        background: linear-gradient(135deg, var(--cyan), var(--accent-soft));
-      }
-
-      .note {
-        margin-top: 0.7rem;
-        font-size: 0.78rem;
-        color: var(--text-muted);
-      }
-
-      .success {
-        font-size: 0.98rem;
-        color: var(--cyan-soft);
-        margin-top: 0.25rem;
-      }
-
-      .success span {
-        display: block;
-        margin-top: 0.25rem;
-        font-size: 0.82rem;
-        color: var(--text-muted);
-      }
-
-      /* ---------- Footer ---------- */
-
-      .footline {
-        margin-top: 2.2rem;
-        border-top: 1px solid rgba(15, 23, 42, 0.9);
-        padding-top: 1.2rem;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        font-size: 0.78rem;
-        color: var(--text-muted);
-      }
-
-      .footline a {
-        color: var(--cyan-soft);
-        text-decoration: none;
-      }
-
-      .footline a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="page">
-      <!-- HEADER -->
-      <header>
-        <div class="brand">
-          <div class="brand-mark">
-            <!-- SAFE INLINE SVG LOGO -->
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 200 200"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="VibeCut Logo"
-            >
-              <path d="M70 40 L45 40 L75 145 L100 145 Z" fill="#00e7ff" />
-              <path d="M130 40 L155 40 L125 145 L100 145 Z" fill="#007bff" />
-            </svg>
-          </div>
-
-          <div class="brand-text">VibeCut</div>
-        </div>
-
-        <div class="chip">
-          <span class="chip-dot"></span>
-          <span>Private alpha waitlist</span>
-        </div>
-      </header>
-
-      <!-- MAIN -->
-      <main>
-        <!-- Hero section -->
-        <section aria-labelledby="hero-title">
-          <p class="hero-kicker">Director-first AI video studio</p>
-
-          <h1 id="hero-title" class="hero-title">
-            Direct the <span>vibe</span>. Make the cut.
-          </h1>
-
-          <p class="hero-sub">
-            VibeCut is where prompts feel more like directing:
-            you mark the emotional beats, we choreograph the cameras,
-            cuts and timing around that rhythm.
-          </p>
-
-          <div class="hero-pills">
-            <div class="pill-strong">Scene-by-scene direction</div>
-            <div class="pill">Vibe-driven prompts, not timelines</div>
-            <div class="pill">Script + audio + camera in one flow</div>
-            <div class="pill">Built for creators & creative leads</div>
-          </div>
-
-          <div class="vibe-strip">
-            <div class="vibe-bar">
-              <div class="vibe-marker"></div>
-            </div>
-            <span>From idea → watchable cut in minutes.</span>
-          </div>
-        </section>
-
-        <!-- Waitlist -->
-        <aside>
-          <div class="card">
-            <div class="card-title">Get on the early-access list</div>
-            <div class="card-sub">
-              A handful of directors, editors and founders will get the first build.
-              Drop your email and we’ll tap you when it’s ready.
-            </div>
-
-            <form id="waitlist-form">
-              <label for="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                autocomplete="email"
-                required
-                placeholder="you@studio.co"
-              />
-              <button type="submit">Join the waitlist</button>
-
-              <p class="note">
-                No spam, no growth hacks. Just launch news and the occasional cut we’re proud of.
-              </p>
-            </form>
-
-            <div id="success-message" class="success hidden">
-              You’re in. Now wait for the cut.
-              <span>We’ll email you when the first alpha build is live.</span>
-            </div>
-          </div>
-        </aside>
-      </main>
-
-      <!-- FOOTER -->
-      <div class="footline">
-        <span>© 2025 VibeCut · Direct the vibe. Make the cut.</span>
-        <span>
-          Follow along on
-          <a href="https://x.com/CutVibe" target="_blank" rel="noreferrer">@CutVibe</a>
-        </span>
-      </div>
+<body>
+  <header>
+    <div class="logo">
+      <!-- SAFE INLINE SVG LOGO -->
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M70 40 L45 40 L75 145 L100 145 Z" fill="#00e7ff" />
+        <path d="M130 40 L155 40 L125 145 L100 145 Z" fill="#007bff" />
+      </svg>
     </div>
 
-    <!-- EmailJS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
-      defer
-    ></script>
+    <div class="hero">
+      <h1>VibeCut</h1>
+    </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        if (!window.emailjs) return;
+    <div class="tagline">Direct the vibe. Make the cut.</div>
+    <div class="sub">VibeCut is the director-first AI video studio. Shape the vibe, lock timing, and ship story.</div>
+  </header>
 
-        emailjs.init("2WkxcVwk1FHP0Sgyh");
+  <section class="cards">
+    <div class="card">
+      <h3>No timelines. Just taste.</h3>
+      <p>Generate cinematic cuts from scripts — AI assembles everything around your intent.</p>
+    </div>
 
-        const form = document.getElementById("waitlist-form");
-        const successEl = document.getElementById("success-message");
+    <div class="card">
+      <h3>Your models, your way.</h3>
+      <p>Runway, Luma, Sora, Kling — dispatch prompts to all of them without switching tools.</p>
+    </div>
 
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
+    <div class="card">
+      <h3>Powered by your keys.</h3>
+      <p>Bring your own OpenAI / Replicate keys. Zero tax. Zero lock-in. Full creative throttle.</p>
+    </div>
+  </section>
 
-          const userEmail = this.email.value.trim();
-          if (!userEmail) return;
+  <form id="waitlist-form">
+    <input type="email" name="email" placeholder="your@email.com" required />
+    <button type="submit">Get Early Access</button>
+  </form>
 
-          emailjs
-            .sendForm("service_57k6qhf", "template_70u9yvd", this)
-            .then(() => {
-              // optional confirmation email
-              emailjs
-                .send("service_57k6qhf", "template_iarwp0d", {
-                  to_email: userEmail,
-                  to_name: userEmail.split("@")[0],
-                })
-                .catch(() => {});
+  <div id="success-message" class="success">You’re in. Now wait for the cut.</div>
 
-              form.classList.add("hidden");
-              successEl.classList.remove("hidden");
-            })
-            .catch(() => {
-              alert(
-                "Something went wrong — DM @CutVibe on X with your email and I’ll add you manually."
-              );
-            });
+  <footer>
+    © 2025 VibeCut • <a href="https://x.com/CutVibe" target="_blank">@CutVibe</a>
+  </footer>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init("2WkxcVwk1FHP0Sgyh");
+
+    document.getElementById("waitlist-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = this.email.value.trim();
+
+      emailjs.sendForm("service_57k6qhf", "template_70u9yvd", this).then(() => {
+        emailjs.send("service_57k6qhf", "template_iarwp0d", {
+          to_email: email,
+          to_name: email.split("@")[0],
         });
+
+        this.style.display = "none";
+        document.getElementById("success-message").style.display = "block";
+      }).catch(() => {
+        alert("Something went wrong — DM @CutVibe on X and I’ll add you manually.");
       });
-    </script>
-  </body>
+    });
+  </script>
+
+</body>
+
 </html>
