@@ -115,29 +115,45 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="relative h-[90vh] w-full overflow-hidden flex items-center justify-center">
-        <!-- HERO VIDEO SOURCE -->
+    <section class="relative h-[90vh] w-full overflow-hidden flex items-center">
+        <!-- VIDEO: Added object-[65%_center] to nudge the face slightly right on mobile -->
         <video autoplay muted loop playsinline 
             poster="hero_poster.jpg" 
-            class="absolute inset-0 h-full w-full object-cover opacity-100 brightness-[1.15] contrast-[1.1]">
-            <source src="vibecut_hero_no_text_web.mp4" type="video/mp4">
+            class="absolute inset-0 h-full w-full object-cover opacity-100 brightness-[1.1] contrast-[1.05] object-[65%_center]">
+            <source src="vibecut_hero_no_text.mp4" type="video/mp4">
         </video>
-        <div class="hero-video-overlay absolute inset-0"></div>
+        
+        <!-- SUBTLE GRADIENT: Just enough to make white text readable over the background -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent"></div>
 
-        <div class="relative z-10 text-center px-6">
-            <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-cyan-400">
-                <span class="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                Human Soul. Synthetic Speed.
-            </div>
-            <h1 class="arri-glow max-w-5xl text-6xl font-bold leading-[0.95] tracking-tighter md:text-9xl">
-                Direct the <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">Vibe</span>.<br/>Make the Cut.
-            </h1>
-            <p class="mt-8 mx-auto max-w-2xl text-lg text-white/50 font-light leading-relaxed">
-                An AI-native studio for the global stage. Directing the vibe and engineering cinematic films for the world’s most ambitious brands and artists.
-            </p>
-            <div class="mt-12 flex flex-col md:flex-row gap-5 justify-center">
-                <a href="#work" class="rounded-full bg-cyan-500 px-10 py-4 text-sm font-bold text-black transition hover:scale-105">View Showreel</a>
-                <a href="#booking-form" class="rounded-full border border-white/20 bg-white/5 px-10 py-4 text-sm font-bold backdrop-blur-md transition hover:bg-white/10">Start a Project</a>
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-16">
+            <div class="max-w-2xl"> 
+                <!-- KICKER -->
+                <div class="mb-8 inline-flex items-center gap-3 rounded-full border border-white/5 bg-white/5 px-4 py-1.5 text-[9px] uppercase tracking-[0.4em] text-cyan-400 backdrop-blur-md">
+                    <span class="h-1 w-1 rounded-full bg-cyan-400 animate-pulse"></span>
+                    Human Soul. Synthetic Speed.
+                </div>
+                
+                <!-- SMALLER HEADLINE: Reduced from 9xl to 7xl -->
+                <h1 class="arri-glow text-4xl font-bold leading-[1.1] tracking-tighter md:text-6xl lg:text-7xl">
+                    Direct the <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">Vibe</span>.<br/>
+                    Make the Cut.
+                </h1>
+                
+                <!-- TIGHTER PARAGRAPH -->
+                <p class="mt-6 max-w-md text-base md:text-lg text-white/50 font-light leading-relaxed">
+                    An AI-native studio for the global stage. Directing the vibe and engineering cinematic films for the world’s most ambitious brands.
+                </p>
+                
+                <!-- ACTION BUTTONS -->
+                <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                    <a href="#work" class="rounded-full bg-cyan-500 px-8 py-3.5 text-[11px] uppercase tracking-widest font-bold text-black transition hover:bg-white hover:scale-105 text-center">
+                        View Showreel
+                    </a>
+                    <a href="#booking-form" class="rounded-full border border-white/15 bg-white/5 px-8 py-3.5 text-[11px] uppercase tracking-widest font-bold backdrop-blur-md transition hover:bg-white/10 text-center">
+                        Start a Project
+                    </a>
+                </div>
             </div>
         </div>
     </section>
