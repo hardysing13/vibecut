@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>VibeCut Studio — Human Soul. Synthetic Speed.</title>
+    <meta name="description" content="Mumbai-based AI creative studio producing cinematic ad films, viral content, and high-end music videos." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Open Graph / WhatsApp / LinkedIn Preview -->
+    <meta property="og:title" content="VibeCut Studio — AI Advertising & Identity" />
+    <meta property="og:description" content="Direct the vibe. Make the cut. Cinematic AI production for the modern era." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.vibecut.design/" />
+    <!-- Ensure this image exists in your root folder for the WhatsApp thumbnail -->
+    <meta property="og:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VibeCut Studio | AI Cinematography" />
+    <meta name="twitter:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --bg: #050505;
+            --cyan: #00f5ff;
+            --accent: #22d3ee;
+            --arri-gold: #d4af37;
+        }
+
+        body {
+            font-family: "Instrument Sans", sans-serif;
+            background-color: var(--bg);
+            color: white;
+            scroll-behavior: smooth;
+        }
+
+    /* Change the top of the gradient to be transparent so the face/action is clear */
+    .hero-video-overlay {
+    background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,0.8) 100%);
+    }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 245, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .vibe-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #1e293b, var(--cyan), #1e293b);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .vibe-marker {
+            position: absolute;
+            height: 100%;
+            width: 30%;
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+            animation: glide 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glide {
+            from { left: -10%; }
+            to { left: 80%; }
+        }
+
+        .arri-glow {
+            text-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+        }
+        
+        input:focus { outline: none; border-color: var(--cyan); }
+    </style>
+</head>
+<body class="selection:bg-cyan-500/30">
+
+    <!-- UPDATED NAVIGATION -->
+    <header class="fixed top-0 z-[100] w-full border-b border-white/5 bg-black/60 backdrop-blur-xl">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+            <div class="flex items-center gap-3">
+                <svg width="24" height="24" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M70 40 L45 40 L75 145 L100 145 Z" fill="#00f5ff" />
+                    <path d="M130 40 L155 40 L125 145 L100 145 Z" fill="#007bff" />
+                </svg>
+                <div class="text-xs font-bold tracking-[0.4em] uppercase">VibeCut Studio</div>
+            </div>
+            <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-[0.2em] text-white/50">
+                <a href="#work" class="hover:text-white transition">Work</a>
+                <a href="#contact" class="hover:text-white transition">Capabilities</a>
+                <a href="https://x.com/CutVibe" target="_blank" class="hover:text-white transition">@CutVibe</a>
+                <a href="https://www.instagram.com/vibecut.design/" target="_blank" class="hover:text-white transition italic text-cyan-400/70 hover:text-cyan-400">Instagram</a>
+            </div>
+            <a href="#contact" class="rounded-full bg-white px-5 py-2 text-[11px] font-bold uppercase tracking-wider text-black transition hover:opacity-80">
+                Book a Project
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative h-[90vh] w-full overflow-hidden flex items-center justify-center">
+        <!-- HERO VIDEO SOURCE -->
+    <video autoplay muted loop playsinline 
+        class="absolute inset-0 h-full w-full object-cover opacity-100 brightness-[1.15] contrast-[1.1]">
+        <source src="vibecut_hero_no_text_web.mp4" type="video/mp4">
+    </video>
+        <div class="hero-video-overlay absolute inset-0"></div>
+
+        <div class="relative z-10 text-center px-6">
+            <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-4 py-2 text-[10px] uppercase tracking-[0.3em] text-cyan-400">
+                <span class="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                Human Soul. Synthetic Speed.
+            </div>
+            <h1 class="arri-glow max-w-5xl text-6xl font-bold leading-[0.95] tracking-tighter md:text-9xl">
+                Direct the <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">Vibe</span>.<br/>Make the Cut.
+            </h1>
+            <p class="mt-8 mx-auto max-w-2xl text-lg text-white/50 font-light leading-relaxed">
+                An AI-native studio for the global stage. Directing the vibe and engineering cinematic films for the world’s most ambitious brands and artists.
+            </p>
+            <div class="mt-12 flex flex-col md:flex-row gap-5 justify-center">
+                <a href="#work" class="rounded-full bg-cyan-500 px-10 py-4 text-sm font-bold text-black transition hover:scale-105">View Showreel</a>
+                <a href="#contact" class="rounded-full border border-white/20 bg-white/5 px-10 py-4 text-sm font-bold backdrop-blur-md transition hover:bg-white/10">Start a Project</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORK GRID -->
+    <section id="work" class="mx-auto max-w-7xl px-6 py-32 lg:px-8">
+        <div class="flex items-end justify-between mb-16 border-b border-white/10 pb-8">
+            <div>
+                <h2 class="text-sm uppercase tracking-[0.5em] text-cyan-400 mb-2">Portfolio</h2>
+                <div class="text-4xl font-bold tracking-tight">Selected Cuts</div>
+            </div>
+            <div class="text-right hidden md:block">
+                <div class="text-[11px] uppercase tracking-widest text-white/30 italic font-light">Arri Alexa LogC Pipeline</div>
+            </div>
+        </div>
+        
+        <div class="grid gap-10 md:grid-cols-2">
+            <!-- Hublot Ad -->
+            <div class="group glass-card overflow-hidden rounded-[2.5rem] p-4">
+                <div class="aspect-video w-full overflow-hidden rounded-[1.8rem] bg-neutral-900">
+                    <video muted loop onmouseover="this.play()" onmouseout="this.pause()" class="h-full w-full object-cover opacity-85 brightness-[1.1] group-hover:opacity-100 transition-all duration-700">
+                        <source src="hublot_spec_web.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-white/40">Luxury Spec / 15s</span>
+                        <span class="text-[10px] text-cyan-400 font-mono">2026.03</span>
+                    </div>
+                    <h3 class="mt-3 text-2xl font-bold">The Hublot Sapphire</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-white/50">Impossible physics and refractive light simulations for high-status technical products.</p>
+                </div>
+            </div>
+
+            <!-- Vanessa Ryan -->
+            <div class="group glass-card overflow-hidden rounded-[2.5rem] p-4">
+                <div class="aspect-video w-full overflow-hidden rounded-[1.8rem] bg-neutral-900">
+                    <video muted loop onmouseover="this.play()" onmouseout="this.pause()" class="h-full w-full object-cover opacity-85 brightness-[1.1] group-hover:opacity-100 transition-all duration-700">
+                        <source src="vanessa_ryan_web.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-white/40">Fashion / Identity</span>
+                        <span class="text-[10px] text-cyan-400 font-mono">2026.02</span>
+                    </div>
+                    <h3 class="mt-3 text-2xl font-bold">Vanessa Ryan</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-white/50">Showcasing Identity Engineering and 100% character consistency across lighting environments.</p>
+                </div>
+            </div>
+
+            <!-- FLAGSHIP FEATURE: THE LATENT SPACE -->
+            <div class="md:col-span-2 group glass-card overflow-hidden rounded-[3rem] p-4 border-cyan-400/20">
+                <div class="aspect-[21/9] w-full overflow-hidden rounded-[2.2rem] bg-neutral-900">
+                    <!-- This video should be a super-cut of the 3 min video for the preview -->
+                    <video muted loop onmouseover="this.play()" onmouseout="this.pause()" class="h-full w-full object-cover opacity-90 brightness-[1.1] group-hover:opacity-100 transition-all duration-1000">
+                        <source src="latent_space_preview_web.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="p-8 md:p-12">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-[11px] uppercase tracking-[0.4em] text-cyan-400 font-bold">World-Building / Music</span>
+                        <div class="flex gap-2">
+                             <span class="px-3 py-1 rounded-full border border-white/10 text-[9px] uppercase tracking-widest text-white/40">3:12 Extended Cut</span>
+                             <span class="px-3 py-1 rounded-full border border-cyan-400/30 text-[9px] uppercase tracking-widest text-cyan-400">Featured</span>
+                        </div>
+                    </div>
+                    <h3 class="text-4xl md:text-5xl font-bold tracking-tighter">The Latent Space</h3>
+                    <p class="mt-6 text-lg leading-relaxed text-white/50 max-w-3xl">
+                        A 3-minute journey into a synthetic cyber-western universe. This project showcases VibeCut's ability to build entire cinematic worlds—handling complex lore, consistent band identity, and synchronized AI scoring.
+                    </p>
+                    <div class="mt-8 flex gap-4">
+                        <button class="text-[10px] uppercase tracking-[0.3em] font-bold border-b border-cyan-400 pb-1 text-cyan-400 hover:text-white hover:border-white transition">Watch Full Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT / WAITLIST SECTION -->
+    <section id="contact" class="mx-auto max-w-7xl px-6 py-32 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
+                    Ready to build your <span class="text-cyan-400">Impossible</span>?
+                </h2>
+                <p class="mt-8 text-xl text-white/50 leading-relaxed max-w-lg">
+                    We are currently taking on select projects for Q2 2026. Whether you're an independent artist or a technical brand, let's ship a cinematic cut.
+                </p>
+                
+                <div class="mt-12 space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-cyan-400 text-sm">01</div>
+                        <div class="text-sm uppercase tracking-widest text-white/70">Cinematography first approach</div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-cyan-400 text-sm">02</div>
+                        <div class="text-sm uppercase tracking-widest text-white/70">Integrated Sound Design</div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-cyan-400 text-sm">03</div>
+                        <div class="text-sm uppercase tracking-widest text-white/70">Identity Engineering</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-[3rem] p-10 md:p-14">
+                <div class="mb-8 flex items-center justify-between">
+                    <div class="text-sm font-bold uppercase tracking-widest">Book a Project</div>
+                    <div class="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-cyan-400">
+                        <span class="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#00f5ff]"></span>
+                        Studio Online
+                    </div>
+                </div>
+                
+                <form id="book-project-form" class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-widest text-white/40 ml-4">Email Address</label>
+                        <input type="email" name="email" required placeholder="director@studio.co" class="w-full rounded-full border border-white/10 bg-black/40 px-8 py-4 text-sm transition-all focus:border-cyan-400 focus:bg-black/60" />
+                    </div>
+                    <button type="submit" class="w-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 py-5 text-sm font-bold uppercase tracking-[0.2em] text-black transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        Send Request
+                    </button>
+                    <div class="vibe-bar mt-8">
+                        <div class="vibe-marker"></div>
+                    </div>
+                    <p class="text-[10px] text-center text-white/30 uppercase tracking-widest mt-4">
+                        Response time: ~24 hours via Mumbai Studio
+                    </p>
+                </form>
+
+                <div id="success-message" class="hidden text-center py-10">
+                    <div class="text-3xl font-bold text-cyan-400 mb-2">Request Received.</div>
+                    <p class="text-sm text-white/50">Check your inbox. We will reach out to discuss the vibe.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UPDATED FOOTER -->
+    <!-- FOOTER -->
+        <footer class="border-t border-white/5 py-20 bg-black">
+            <div class="mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+                <!-- BRAND & LOCATION HUB -->
+                <div>
+                    <div class="text-xs font-bold tracking-[0.4em] uppercase text-white/40">VibeCut.Design</div>
+                    <!-- UPDATED GLOBAL LOCATION LINE -->
+                    <div class="mt-2 text-[10px] text-white/20 tracking-widest uppercase">
+                        AI Advertising Studio • Remote Worldwide • Mumbai Hub
+                    </div>
+                </div>
+                
+                <!-- SOCIAL LINKS -->
+                <div class="flex gap-10 text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                    <a href="mailto:hello@vibecut.design" class="hover:text-cyan-400 transition-colors">Email</a>
+                    <a href="https://x.com/CutVibe" target="_blank" class="hover:text-cyan-400 transition-colors">X / Twitter</a>
+                    <a href="https://www.instagram.com/vibecut.design/" target="_blank" class="hover:text-cyan-400 transition-colors">Instagram</a>
+                </div>
+
+                <!-- COPYRIGHT -->
+                <div class="text-[10px] text-white/10 uppercase tracking-widest font-light">
+                    © 2026 VibeCut Studio. All Cuts Reserved.
+                </div>
+            </div>
+        </footer>
+
+    <!-- EmailJS Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Keep your existing EmailJS User ID
+            if (window.emailjs) {
+                emailjs.init("2WkxcVwk1FHP0Sgyh"); 
+            }
+
+            const form = document.getElementById("book-project-form");
+            const successEl = document.getElementById("success-message");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const userEmail = this.email.value.trim();
+                if (!userEmail) return;
+
+                // Using your Service and Template IDs
+                emailjs.sendForm("service_57k6qhf", "template_70u9yvd", this)
+                    .then(() => {
+                        // Optional: Send automated confirmation to user
+                        emailjs.send("service_57k6qhf", "template_iarwp0d", {
+                            to_email: userEmail,
+                            to_name: userEmail.split("@")[0],
+                        }).catch(() => {});
+
+                        form.classList.add("hidden");
+                        successEl.classList.remove("hidden");
+                    })
+                    .catch(() => {
+                        alert("Error connecting to studio. DM @CutVibe on X.");
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
