@@ -11,8 +11,9 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.vibecut.design/" />
   <meta property="og:image" content="https://www.vibecut.design/og-vibecut.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:width" content="1920" />
+  <meta property="og:image:height" content="1080" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:site_name" content="VibeCut Studio" />
   <!-- Twitter card -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -524,8 +525,12 @@
       .ls-head { flex-direction: column; }
       .pf-grid { grid-template-columns: 1fr; }
       .pf-card.wide { grid-column: span 1; }
-      /* Hide eyebrow on mobile — wraps badly at narrow widths */
-      .eyebrow { display: none; }
+      /* Eyebrow: remove decorative line, reduce spacing so it fits */
+      .eyebrow {
+        font-size: 9px; letter-spacing: .1em;
+        flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+      }
+      .eyebrow::before { display: none; }
       /* Reduce hero bottom padding so content isn't too low */
       .hero { padding-bottom: 48px; }
       /* Tighten hero sub text */
@@ -539,7 +544,6 @@
     }
   
     @media (max-width: 600px) {
-      .eyebrow { display: none; }
       .hero { padding-bottom: 48px; }
       .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
       .btn-gold { width: 100%; text-align: center; }
@@ -984,6 +988,8 @@
 </section>
 
 <!-- FOOTER -->
+
+
 
 
 <footer>
