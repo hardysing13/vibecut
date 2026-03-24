@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeCut Studio — AI Advertising & Identity</title>
+  <meta name="description" content="AI-native advertising studio. Cinematic films for ambitious brands. Boutique craftsmanship at synthetic speed." />
+  <!-- Open Graph / WhatsApp / LinkedIn preview -->
+  <meta property="og:title" content="VibeCut Studio — AI Advertising &amp; Identity" />
+  <meta property="og:description" content="Direct the vibe. Make the cut. Cinematic AI production for the modern era." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vibecut.design/" />
+  <meta property="og:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="675" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:site_name" content="VibeCut Studio" />
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VibeCut Studio | AI Cinematography" />
+  <meta name="twitter:description" content="Direct the vibe. Make the cut. Cinematic AI production for the modern era." />
+  <meta name="twitter:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black:   #080808;
+      --deep:    #0d0d0d;
+      --surface: #111111;
+      --border:  rgba(255,255,255,0.07);
+      --borderB: rgba(255,255,255,0.14);
+      --white:   #f5f2ec;
+      --muted:   rgba(245,242,236,0.38);
+      --muted2:  rgba(245,242,236,0.55);
+      --gold:    #c9a84c;
+      --goldDim: rgba(201,168,76,0.16);
+      --cyan:    #00c8ff;
+      --fd: 'Bebas Neue', sans-serif;
+      --fs: 'DM Serif Display', serif;
+      --fb: 'Instrument Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--fb);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      /* Transparent 1x1 SVG cursor — most reliable hide-native-cursor method on Safari.
+         cursor:none on body has a well-known Safari inheritance bug for fixed children. */
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E") 0 0, none;
+    }
+    /* Belt AND suspenders — force invisible cursor on every interactive element */
+    a, button, input, select, textarea, label, [role="button"], summary {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E") 0 0, none;
+    }
+
+    /* ── CUSTOM CURSOR ──────────────────────────────────────────────
+       RULES (learned the hard way):
+       - Two SEPARATE fixed divs. No wrapper element.
+       - Position via left/top ONLY. No CSS transform positioning.
+       - NO will-change (creates GPU stacking contexts that eat sections in Safari)
+       - NO mix-blend-mode (Safari loses fixed elements over overflow:hidden)
+       - NO opacity transition on the dot (causes Safari repaint flicker)
+       - Both start at left:-200px to avoid flashing at 0,0 on load
+       - Centering done via negative margin, not transform:translate(-50%,-50%)
+    ─────────────────────────────────────────────────────────────── */
+    #cur-dot {
+      position: fixed;
+      left: -200px; top: -200px;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      z-index: 700;
+      pointer-events: none;
+      margin-left: -4px; margin-top: -4px;
+    }
+    #cur-ring {
+      position: fixed;
+      left: -200px; top: -200px;
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(201,168,76,0.5);
+      border-radius: 50%;
+      z-index: 699;
+      pointer-events: none;
+      margin-left: -18px; margin-top: -18px;
+      transition: width .2s ease, height .2s ease, margin .2s ease, border-color .2s ease;
+    }
+    #cur-ring.big {
+      width: 52px; height: 52px;
+      margin-left: -26px; margin-top: -26px;
+      border-color: var(--gold);
+    }
+
+    /* ── NOISE GRAIN ────────────────────────────────────────────────
+       MUST be a real <div>, NOT body::before or body::after.
+       A position:fixed pseudo-element on <body> creates a stacking
+       context ON the body itself in Safari — this collapses all
+       child z-index stacks and makes sections disappear.
+    ─────────────────────────────────────────────────────────────── */
+    #noise {
+      position: fixed; inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAV ──────────────────────────────────────────────────── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 400;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 48px;
+      background: linear-gradient(to bottom, rgba(8,8,8,.96) 0%, transparent 100%);
+      transition: background .4s;
+    }
+    #nav.scrolled {
+      background: rgba(8,8,8,.93);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--fd); font-size: 21px; letter-spacing: .12em;
+      color: var(--white); text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-mark { display: flex; align-items: center; }
+    .nav-mark svg { overflow: visible; }
+    /* Static logo — no CSS animations to avoid Safari stacking context bugs */
+    .vc-blade-l, .vc-blade-r { opacity: 1; }
+    .vc-frame-tl, .vc-frame-tr, .vc-frame-bl, .vc-frame-br { opacity: 1; }
+    .vc-glow { opacity: 1; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted2); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--black); background: var(--gold);
+      padding: 10px 20px; text-decoration: none; transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .84; }
+
+    /* The Ken Burns Animation */
+    @keyframes kenburns {
+      0% {
+        transform: scale(1);
+        transform-origin: center center;
+      }
+      100% {
+        transform: scale(1.08); /* Subtle 8% zoom is enough */
+      }
+    }
+    
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      position: relative; min-height: 100vh; min-height: 100svh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+      overflow: hidden;
+    }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; }
+    /* Apply to the Hero Image */
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      
+      /* The Magic */
+      animation: kenburns 30s ease-in-out infinite alternate;
+      
+      /* Performance Fixes: Ensures smooth motion on Safari/Chrome */
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(8,8,8,.15) 0%, rgba(8,8,8,.25) 40%, rgba(8,8,8,.78) 72%, rgba(8,8,8,.97) 100%);
+    }
+    .hero-body { position: relative; z-index: 2; max-width: 860px; }
+    .eyebrow {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+    }
+    .eyebrow::before { content: ''; display: block; width: 38px; height: 1px; background: var(--gold); }
+    h1 {
+      font-family: var(--fd);
+      font-size: clamp(62px, 9.5vw, 126px);
+      line-height: .92; letter-spacing: .02em; color: var(--white); margin-bottom: 26px;
+    }
+    h1 em { font-family: var(--fs); font-style: italic; color: var(--gold); }
+    .hero-sub { font-size: 15px; line-height: 1.7; color: var(--muted2); max-width: 480px; margin-bottom: 40px; }
+    .hero-btns { display: flex; align-items: center; gap: 20px; }
+    .btn-gold {
+      font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--black); background: var(--gold);
+      padding: 15px 34px; text-decoration: none; display: inline-block;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-gold:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-ghost {
+      font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted2); text-decoration: none;
+      display: flex; align-items: center; gap: 9px; transition: color .2s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+    .btn-ghost svg { transition: transform .2s; }
+    .btn-ghost:hover svg { transform: translateX(4px); }
+    .scroll-hint { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 2; }
+    .scroll-line {
+      display: block; width: 1px; height: 50px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100% { opacity:.3; } 50% { opacity:1; } }
+
+    /* ── SHARED SECTION ───────────────────────────────────────── */
+    .sec { position: relative; }
+    .sec-pad { padding: 110px 48px; }
+    .sec-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 32px;
+      margin-bottom: 56px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+    }
+    .sec-label {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold);
+      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+    }
+    .sec-label::before { content: ''; display: block; width: 26px; height: 1px; background: var(--gold); }
+    h2 { font-family: var(--fd); font-size: clamp(38px, 5.5vw, 68px); letter-spacing: .04em; line-height: .95; color: var(--white); }
+    h3 { font-family: var(--fs); font-size: 22px; font-weight: 400; color: var(--white); }
+    .note { font-size: 13px; line-height: 1.7; color: var(--muted2); max-width: 300px; text-align: right; }
+
+    /* ── CATEGORIES ───────────────────────────────────────────── */
+    .cats {
+      padding: 0; background: var(--deep);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      overflow: hidden; height: 48px;
+    }
+    .cats-label {
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted2); white-space: nowrap; flex-shrink: 0;
+      padding: 0 24px 0 48px; border-right: 1px solid var(--border);
+      height: 100%; display: flex; align-items: center;
+    }
+    .cats-track-wrap {
+      flex: 1; overflow: hidden; position: relative; height: 100%;
+    }
+    .cats-track-wrap::before, .cats-track-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; z-index: 2; width: 40px; pointer-events: none;
+    }
+    .cats-track-wrap::before { left: 0; background: linear-gradient(to right, var(--deep), transparent); }
+    .cats-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--deep), transparent); }
+    .cats-list {
+      display: flex; align-items: center; gap: 28px;
+      white-space: nowrap;
+      width: max-content; height: 100%;
+      /* JS-driven scroll via translateX — no CSS animation = no stacking context */
+    }
+    .cat { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(245,242,236,.55); white-space: nowrap; font-weight: 500; transition: color .3s; flex-shrink: 0; }
+    .cat:hover { color: rgba(245,242,236,.9); }
+    .cat-sep { width: 3px; height: 3px; background: var(--borderB); border-radius: 50%; flex-shrink: 0; }
+
+    /* ── CAROUSEL ─────────────────────────────────────────────── */
+    #showreel { background: var(--deep); }
+    .car-wrap { overflow: hidden; }
+    .car-track { display: flex; gap: 18px; transition: transform .58s cubic-bezier(.25,.46,.45,.94); }
+    .car-slide {
+      flex: 0 0 calc(50% - 9px); position: relative;
+      overflow: hidden; aspect-ratio: 16/9; background: var(--surface);
+    }
+    @media (max-width: 860px) { .car-slide { flex: 0 0 100%; } }
+    .car-slide img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s ease, filter .35s ease; filter: brightness(.68); }
+    .car-slide:hover img { transform: scale(1.04); filter: brightness(.48); }
+    .car-grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,.84) 0%, transparent 55%); }
+    .car-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; }
+    .car-tag { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+    .car-title { font-family: var(--fd); font-size: 24px; letter-spacing: .06em; color: var(--white); }
+    .car-play {
+      position: absolute; top: 50%; left: 50%;
+      margin-top: -32px; margin-left: -32px;
+      width: 64px; height: 64px;
+      border: 1.5px solid rgba(255,255,255,.65); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .28s;
+      background: rgba(0,0,0,.18);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+    .car-slide:hover .car-play { opacity: 1; }
+    .car-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; }
+    .car-dots { display: flex; gap: 8px; }
+    .car-dot { width: 26px; height: 2px; background: var(--borderB); transition: background .3s, width .3s; }
+    .car-dot.on { background: var(--gold); width: 50px; }
+    .car-arrows { display: flex; gap: 10px; }
+    .car-btn {
+      width: 46px; height: 46px; border: 1px solid var(--borderB); background: transparent;
+      color: var(--white); display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, background .2s;
+    }
+    .car-btn:hover { border-color: var(--gold); background: var(--goldDim); }
+
+    /* ── YT MODAL ─────────────────────────────────────────────── */
+    #yt-modal {
+      display: none; position: fixed; inset: 0; z-index: 800;
+      background: rgba(0,0,0,.92);
+      align-items: center; justify-content: center;
+    }
+    #yt-modal.on { display: flex; }
+    #yt-inner { position: relative; width: 90vw; max-width: 1080px; aspect-ratio: 16/9; }
+    #yt-inner iframe { width: 100%; height: 100%; border: none; }
+    #yt-close {
+      position: absolute; top: -42px; right: 0;
+      font-family: var(--fd); font-size: 13px; letter-spacing: .16em;
+      color: var(--muted2); background: none; border: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #yt-close:hover { color: var(--white); }
+
+    /* ── MANIFESTO ────────────────────────────────────────────── */
+    #manifesto { background: var(--black); overflow: hidden; }
+    .bg-word {
+      position: absolute; font-family: var(--fd); font-size: 320px; line-height: 1;
+      color: rgba(255,255,255,.016); top: -40px; left: -10px;
+      pointer-events: none; user-select: none;
+    }
+    .mf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 64px; }
+    .mf-card {
+      background: var(--surface); padding: 48px 44px;
+      border: 1px solid var(--border); position: relative; overflow: hidden;
+      transition: border-color .3s;
+    }
+    .mf-card:hover { border-color: rgba(201,168,76,.28); }
+    .mf-num { font-family: var(--fd); font-size: 66px; color: rgba(201,168,76,.38); line-height: 1; margin-bottom: 24px; letter-spacing: .04em; }
+    .mf-hook { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .mf-title { font-family: var(--fs); font-size: 21px; color: var(--white); margin-bottom: 14px; line-height: 1.3; }
+    .mf-body { font-size: 14px; line-height: 1.75; color: var(--muted2); }
+    .mf-featured {
+      grid-column: span 2; padding: 56px 60px;
+      background: linear-gradient(135deg, #111 0%, #0a0a0a 100%);
+      border-color: rgba(201,168,76,.18);
+      display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+    }
+    .mf-featured .mf-title { font-size: 28px; }
+    .mf-icon {
+      width: 140px; height: 140px; border: 1px solid rgba(201,168,76,.2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--fd); font-size: 12px; letter-spacing: .16em;
+      color: var(--gold); text-align: center; line-height: 1.6; flex-shrink: 0;
+    }
+
+    /* ── PORTFOLIO ────────────────────────────────────────────── */
+    #work { background: var(--deep); }
+    .pf-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+    .pf-card { position: relative; overflow: hidden; background: var(--surface); }
+    .pf-card.wide { grid-column: span 2; }
+    .pf-thumb { position: relative; overflow: hidden; aspect-ratio: 4/3; }
+    .pf-card.wide .pf-thumb { aspect-ratio: 16/9; }
+    .pf-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .65s ease, filter .38s; filter: brightness(.7); }
+    .pf-card:hover .pf-thumb img { transform: scale(1.05); filter: brightness(.48); }
+    .pf-play {
+      position: absolute; top: 50%; left: 50%;
+      margin-top: -34px; margin-left: -34px;
+      width: 68px; height: 68px; border: 1.5px solid rgba(255,255,255,.6);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .28s;
+      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      background: rgba(0,0,0,.18); pointer-events: none;
+    }
+    .pf-card:hover .pf-play { opacity: 1; }
+    .pf-badge {
+      position: absolute; top: 18px; left: 18px;
+      font-size: 10px; letter-spacing: .13em; text-transform: uppercase;
+      background: var(--gold); color: var(--black); padding: 5px 10px; font-weight: 600;
+    }
+    .pf-info { padding: 26px 26px 30px; border-top: 1px solid var(--border); transition: border-color .3s; }
+    .pf-card:hover .pf-info { border-color: rgba(201,168,76,.22); }
+    .pf-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .pf-tag { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+    .pf-date { font-size: 10px; letter-spacing: .1em; color: var(--muted); }
+    .pf-title { font-family: var(--fs); font-size: 20px; color: var(--white); margin-bottom: 7px; }
+    .pf-desc { font-size: 13px; line-height: 1.65; color: var(--muted2); }
+    .pf-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; letter-spacing: .13em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none; margin-top: 14px; transition: gap .2s;
+    }
+    .pf-link:hover { gap: 14px; }
+
+    /* ── LATENT SPACE ─────────────────────────────────────────── */
+    #latent { background: var(--black); }
+    .ls-glow {
+      position: absolute; top: -100px; right: -100px;
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, rgba(0,200,255,.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ls-head {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 48px;
+      margin-bottom: 64px; padding-bottom: 28px; border-bottom: 1px solid var(--border);
+    }
+    .ls-label {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--cyan);
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .ls-label::before { content: ''; display: block; width: 26px; height: 1px; background: var(--cyan); }
+    .ls-h2 { font-family: var(--fd); font-size: clamp(38px, 5.5vw, 68px); letter-spacing: .04em; line-height: .95; color: var(--white); }
+    .ls-lore { max-width: 400px; padding-top: 16px; }
+    .ls-lore p { font-size: 14px; line-height: 1.75; color: var(--muted2); margin-bottom: 14px; }
+    .ls-badge { display: inline-block; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; border: 1px solid rgba(0,200,255,.3); color: var(--cyan); padding: 7px 14px; margin-top: 6px; }
+    .ls-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+    .ls-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; position: relative; transition: border-color .3s; }
+    .ls-card:hover { border-color: rgba(0,200,255,.18); }
+    .ls-card.wide { grid-column: span 2; }
+    .ls-thumb { aspect-ratio: 16/9; position: relative; overflow: hidden; }
+    .ls-card.wide .ls-thumb { aspect-ratio: 21/9; }
+    .ls-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s, filter .35s; filter: brightness(.62) saturate(.8); }
+    .ls-card:hover .ls-thumb img { transform: scale(1.04); filter: brightness(.44) saturate(1.1); }
+    .ls-tgrad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,.78) 0%, transparent 50%); }
+    .ls-play {
+      position: absolute; top: 50%; left: 50%;
+      margin-top: -32px; margin-left: -32px;
+      width: 64px; height: 64px; border: 1.5px solid rgba(0,200,255,.7);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .28s;
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      background: rgba(0,0,0,.15); pointer-events: none;
+    }
+    .ls-card:hover .ls-play { opacity: 1; }
+    .ls-info { padding: 22px 22px 26px; }
+    .ls-tag { font-size: 10px; letter-spacing: .17em; text-transform: uppercase; color: var(--cyan); margin-bottom: 7px; }
+    .ls-title { font-family: var(--fs); font-size: 20px; color: var(--white); margin-bottom: 7px; }
+    .ls-desc { font-size: 13px; line-height: 1.65; color: var(--muted2); margin-bottom: 14px; }
+    .ls-link { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--cyan); text-decoration: none; transition: gap .2s; }
+    .ls-link:hover { gap: 14px; }
+    .ls-roster { background: linear-gradient(135deg, #0d0d18 0%, #080d0d 100%) !important; border-color: rgba(0,200,255,.1) !important; }
+    .member { margin-bottom: 16px; }
+    .member-name { font-family: var(--fd); font-size: 15px; letter-spacing: .1em; color: var(--cyan); }
+    .member-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── CONTACT ──────────────────────────────────────────────── */
+    #contact { background: var(--deep); overflow: hidden; }
+    .contact-glow {
+      position: absolute; bottom: -100px; right: -100px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(201,168,76,.055) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 88px; align-items: start; }
+    .avail { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: #5eca8a; margin-bottom: 24px; }
+    .avail-dot { width: 7px; height: 7px; background: #5eca8a; border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+    .contact-copy { font-size: 14px; line-height: 1.8; color: var(--muted2); margin-bottom: 6px; }
+    .contact-hint { font-size: 13px; line-height: 1.8; color: var(--muted); margin-bottom: 40px; }
+    .pitch-item { display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--border); }
+    .pitch-num { font-family: var(--fd); font-size: 30px; color: rgba(201,168,76,.42); line-height: 1; flex-shrink: 0; width: 38px; }
+    .pitch-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .pitch-desc { font-size: 13px; line-height: 1.65; color: var(--muted2); }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      color: var(--white); font-family: var(--fb); font-size: 15px;
+      padding: 15px 18px; outline: none; transition: border-color .2s; appearance: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-textarea { resize: vertical; min-height: 116px; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-submit {
+      width: 100%; background: var(--gold); color: var(--black); border: none;
+      font-family: var(--fb); font-size: 13px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+      padding: 18px; margin-top: 6px; transition: opacity .2s, transform .2s;
+    }
+    .form-submit:hover { opacity: .86; transform: translateY(-1px); }
+    .form-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+    #form-success { display: none; text-align: center; padding: 40px 0; }
+    #form-success.on { display: block; }
+    #form-success h3 { font-family: var(--fd); font-size: 30px; letter-spacing: .08em; margin-bottom: 10px; }
+    #form-success p { font-size: 14px; color: var(--muted2); }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      padding: 56px 48px; border-top: 1px solid var(--border);
+      background: var(--black);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 28px;
+    }
+    .foot-logo { font-family: var(--fd); font-size: 19px; letter-spacing: .12em; }
+    .foot-info { font-size: 12px; color: var(--muted); line-height: 1.8; }
+    .foot-info a { color: var(--gold); text-decoration: none; }
+    .foot-links { display: flex; gap: 26px; list-style: none; }
+    .foot-links a { font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted2); text-decoration: none; transition: color .2s; }
+    .foot-links a:hover { color: var(--gold); }
+    .foot-legal { width: 100%; padding-top: 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+    .foot-legal p { font-size: 11px; color: var(--muted); line-height: 1.7; max-width: 520px; }
+
+    /* ── SCROLL FADE-IN ─────────────────────────────────────────
+       Safari-safe: use @keyframes + animation-play-state instead of
+       opacity:0 + IntersectionObserver. The observer approach can
+       silently fail on Safari when elements start hidden, leaving
+       every section invisible. This approach shows content immediately
+       if JS fails, and animates in when the observer fires.
+    ───────────────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .fade {
+      /* Visible by default — JS will add animation only when in view */
+      opacity: 1; transform: none;
+    }
+    .fade.animate {
+      animation: fadeUp 0.65s ease both;
+    }
+    .fade.animate.d1 { animation-delay: .1s; }
+    .fade.animate.d2 { animation-delay: .22s; }
+    .fade.animate.d3 { animation-delay: .34s; }
+    .fade.animate.d4 { animation-delay: .46s; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 1020px) {
+      #nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+      .hero, .sec-pad { padding-left: 24px; padding-right: 24px; }
+      .cats-label { padding: 0 12px 0 20px; }
+      .mf-grid { grid-template-columns: 1fr; }
+      .mf-featured { grid-column: span 1; grid-template-columns: 1fr; }
+      .pf-grid { grid-template-columns: 1fr 1fr; }
+      .pf-card.wide { grid-column: span 2; }
+      .ls-grid { grid-template-columns: 1fr; }
+      .ls-card.wide { grid-column: span 1; }
+      .contact-grid { grid-template-columns: 1fr; gap: 52px; }
+      footer { padding: 44px 24px; }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 54px; }
+      .form-row { grid-template-columns: 1fr; }
+      .ls-head { flex-direction: column; }
+      .pf-grid { grid-template-columns: 1fr; }
+      .pf-card.wide { grid-column: span 1; }
+      /* Eyebrow: remove decorative line, reduce spacing so it fits */
+      .eyebrow {
+        font-size: 9px; letter-spacing: .1em;
+        flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+      }
+      .eyebrow::before { display: none; }
+      /* Reduce hero bottom padding so content isn't too low */
+      .hero { padding-bottom: 48px; }
+      /* Tighten hero sub text */
+      .hero-sub { font-size: 14px; margin-bottom: 28px; }
+      /* Stack CTA buttons vertically on very small screens */
+      .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .btn-gold { width: 100%; text-align: center; }
+      /* Ghost button always readable on mobile over varied hero backgrounds */
+      .btn-ghost { color: rgba(245,242,236,0.85); }
+      .btn-ghost svg { stroke: rgba(245,242,236,0.85); }
+    }
+  
+    @media (max-width: 600px) {
+      .hero { padding-bottom: 48px; }
+      .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .btn-gold { width: 100%; text-align: center; }
+      /* Ghost button always readable on mobile over varied hero backgrounds */
+      .btn-ghost { color: rgba(245,242,236,0.85); }
+      .btn-ghost svg { stroke: rgba(245,242,236,0.85); }
+    }</style>
+</head>
+<body>
+
+<!-- Noise grain — real <div>, NOT body::before (critical Safari fix) -->
+<div id="noise" aria-hidden="true"></div>
+
+<!-- Custom cursor — two SEPARATE fixed divs, no wrapper -->
+<div id="cur-dot" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+
+<!-- YouTube modal -->
+<div id="yt-modal">
+  <div id="yt-inner">
+    <button id="yt-close">✕ &nbsp;Close</button>
+    <iframe id="yt-frame" src="" allowfullscreen allow="autoplay; encrypted-media" title="Project Film"></iframe>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-mark">
+      <svg width="36" height="40" viewBox="0 0 36 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vcg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#00e5ff"/>
+            <stop offset="100%" stop-color="#0055ff"/>
+          </linearGradient>
+        </defs>
+        <!-- Film frame corner brackets (gold) -->
+        <path class="vc-frame-tl" d="M1 1 L1 9 M1 1 L9 1" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <path class="vc-frame-tr" d="M35 1 L35 9" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <path class="vc-frame-bl" d="M1 39 L1 31 M1 39 L9 39" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <path class="vc-frame-br" d="M35 39 L35 31 M35 39 L27 39" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <!-- V left blade (cyan) -->
+        <path class="vc-blade-l vc-glow" d="M5 4 L18 36" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"/>
+        <!-- V right blade (blue) -->
+        <path class="vc-blade-r" d="M31 4 L18 36" stroke="#0055ff" stroke-width="4" stroke-linecap="round"/>
+        <!-- Inner highlight -->
+        <path class="vc-blade-l" d="M7 4 L18 32" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="vc-blade-r" d="M29 4 L18 32" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </span>VibeCut Studio
+  </a>
+  <ul class="nav-links">
+    <li><a href="#showreel">Showreel</a></li>
+    <li><a href="#work">Portfolio</a></li>
+    <li><a href="#latent">The Latent Space</a></li>
+    <li><a href="#manifesto">Why AI</a></li>
+    <li><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274f424b4b4867514e4542445253094342544e4049">[email&#160;protected]</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="hero_poster.jpg" alt="" aria-hidden="true" onerror="this.parentElement.style.background='linear-gradient(135deg,#0d0d0d,#1a1209)'">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-body fade">
+    <p class="eyebrow">AI-Native Studio · Global Reach · Est. 2025</p>
+    <h1>Direct the Vibe.<br><em>Make the Cut.</em></h1>
+    <p class="hero-sub">An AI-native studio for the global stage. Engineering cinematic films for ambitious brands — removing the technical ceilings of what can be filmed.</p>
+    <div class="hero-btns">
+      <a href="#showreel" class="btn-gold">View Showreel</a>
+      <a href="#contact" class="btn-ghost">
+        Start a Project
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span class="scroll-line"></span></div>
+</section>
+
+<!-- CATEGORIES STRIP -->
+<div class="cats">
+  <span class="cats-label">We Serve</span>
+  <div class="cats-track-wrap">
+    <div class="cats-list">
+      <span class="cat">Luxury Goods</span><span class="cat-sep"></span>
+      <span class="cat">Fashion &amp; Identity</span><span class="cat-sep"></span>
+      <span class="cat">FMCG &amp; D2C</span><span class="cat-sep"></span>
+      <span class="cat">Fintech</span><span class="cat-sep"></span>
+      <span class="cat">Music &amp; Entertainment</span><span class="cat-sep"></span>
+      <span class="cat">Tech Brands</span><span class="cat-sep"></span>
+      <span class="cat">Hospitality</span><span class="cat-sep"></span>
+      <span class="cat">Beauty &amp; Wellness</span><span class="cat-sep"></span>
+      <span class="cat">Automotive</span><span class="cat-sep"></span>
+      <span class="cat">Real Estate</span><span class="cat-sep"></span>
+      <span class="cat">Luxury Goods</span><span class="cat-sep"></span>
+      <span class="cat">Fashion &amp; Identity</span><span class="cat-sep"></span>
+      <span class="cat">FMCG &amp; D2C</span><span class="cat-sep"></span>
+      <span class="cat">Fintech</span><span class="cat-sep"></span>
+      <span class="cat">Music &amp; Entertainment</span><span class="cat-sep"></span>
+      <span class="cat">Tech Brands</span><span class="cat-sep"></span>
+      <span class="cat">Hospitality</span><span class="cat-sep"></span>
+      <span class="cat">Beauty &amp; Wellness</span><span class="cat-sep"></span>
+      <span class="cat">Automotive</span><span class="cat-sep"></span>
+      <span class="cat">Real Estate</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHOWREEL CAROUSEL -->
+<section id="showreel" class="sec sec-pad">
+  <div class="sec-head fade">
+    <div><p class="sec-label">Selected Cuts</p><h2>Showreel</h2></div>
+    <p class="note">Cinema-grade execution from a single operator and AI pipeline.</p>
+  </div>
+  <div class="car-wrap fade d1">
+    <div class="car-track" id="car-track">
+
+      <div class="car-slide" data-yt="wtb_caN_xxE" style="cursor:pointer;">
+        <img src="latent_space_poster.jpg" alt="The Latent Space" onerror="this.style.background='#1a1a2e';this.style.display='block'">
+        <div class="car-grad"></div>
+        <div class="car-play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="car-info">
+          <p class="car-tag">World-Building / Music · 3:12 Extended Cut</p>
+          <p class="car-title">The Latent Space</p>
+        </div>
+      </div>
+
+      <div class="car-slide" data-yt="BisV0T0sgBY" style="cursor:pointer;">
+        <img src="hublot_poster.jpg" alt="Hublot: Precision Motion" onerror="this.style.background='#1a1209';this.style.display='block'">
+        <div class="car-grad"></div>
+        <div class="car-play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="car-info">
+          <p class="car-tag">Luxury Horology &amp; High-Speed Edit · Spec Concept</p>
+          <p class="car-title">Hublot: Precision Motion</p>
+        </div>
+      </div>
+
+      <div class="car-slide" data-yt="oGQrQCR7arU" style="cursor:pointer;">
+        <img src="vanessa_poster.jpg" alt="Elemental Alchemy" onerror="this.style.background='#1a1218';this.style.display='block'">
+        <div class="car-grad"></div>
+        <div class="car-play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="car-info">
+          <p class="car-tag">Atmospheric Integration &amp; Visual Cohesion · Founding Client</p>
+          <p class="car-title">Elemental Alchemy</p>
+        </div>
+      </div>
+
+      <div class="car-slide" data-yt="SAazPRLlhdE" style="cursor:pointer;">
+        <img src="vanessa_poster2.jpg" alt="Elemental Alchemy II" onerror="this.style.background='#1a1218';this.style.display='block'">
+        <div class="car-grad"></div>
+        <div class="car-play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="car-info">
+          <p class="car-tag">Atmospheric Integration &amp; Visual Cohesion · Founding Client</p>
+          <p class="car-title">Elemental Alchemy II</p>
+        </div>
+      </div>
+
+      <div class="car-slide" data-yt="KYn0HM_DDuw" style="cursor:pointer;">
+        <img src="scarlet_poster.jpg" alt="The Scarlet Bride" onerror="this.style.background='#180a0a';this.style.display='block'">
+        <div class="car-grad"></div>
+        <div class="car-play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="car-info">
+          <p class="car-tag">High-Fashion Cinematography · Founding Client</p>
+          <p class="car-title">The Scarlet Bride</p>
+        </div>
+      </div>
+
+      <!-- Add more car-slide blocks here as new cuts are released -->
+
+    </div>
+  </div>
+  <div class="car-nav fade d2">
+    <div class="car-dots" id="car-dots"></div>
+    <div class="car-arrows">
+      <button class="car-btn" id="car-prev" aria-label="Previous">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="car-btn" id="car-next" aria-label="Next">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- WHY AI ADS -->
+<section id="manifesto" class="sec sec-pad">
+  <span class="bg-word" aria-hidden="true">WHY</span>
+  <div class="sec-head fade">
+    <div><p class="sec-label">The Case for AI Advertising</p><h2>Why AI Ads<br>Win.</h2></div>
+    <p class="note">The brands that move first on AI production will own the next decade of Indian advertising.</p>
+  </div>
+  <div class="mf-grid">
+    <div class="mf-card fade d1">
+      <div class="mf-num">01</div>
+      <p class="mf-hook">The Cost Play</p>
+      <h3 class="mf-title">Boutique Craftsmanship at Scale</h3>
+      <p class="mf-body">Forget "cheaper." This is about removing the technical ceilings of what can be filmed. Zero location scouting. Zero travel. Zero weather cancellations. A shoot costing ₹40L on traditional production can be executed for a fraction — and iterated 10 times before sign-off.</p>
+    </div>
+    <div class="mf-card fade d2">
+      <div class="mf-num">02</div>
+      <p class="mf-hook">The Media Play</p>
+      <h3 class="mf-title">Spend More on Messaging, Less on Production</h3>
+      <p class="mf-body">Traditional brands are creative-heavy and distribution-light. We flip the pyramid. When production cost drops by 70%, that budget goes where it actually moves the needle — media placement, targeting, and the reach that converts to revenue.</p>
+    </div>
+    <div class="mf-card fade d3">
+      <div class="mf-num">03</div>
+      <p class="mf-hook">The Targeting Play</p>
+      <h3 class="mf-title">The Same Garment, Ten Worlds</h3>
+      <p class="mf-body">Show the same dress on a London street, a Dubai desert, and a Tokyo neon garden — targeting specific demographics with zero additional travel cost. AI doesn't just produce ads; it produces <em>versions</em>. One campaign becomes a hundred precisely aimed shots.</p>
+    </div>
+    <div class="mf-card fade d4">
+      <div class="mf-num">04</div>
+      <p class="mf-hook">The Diversity Play</p>
+      <h3 class="mf-title">The Infinite Casting Agency</h3>
+      <p class="mf-body">Deploy your hero garment across 10 different body types and ethnicities in one afternoon. Inclusive customers convert up to 3× better — AI makes this the default, not the premium.</p>
+    </div>
+    <div class="mf-card mf-featured fade">
+      <div>
+        <p class="mf-hook">The Inventory Play</p>
+        <h3 class="mf-title">Zero-Inventory Pre-Sale: Test Before You Manufacture</h3>
+        <p class="mf-body" style="margin-top:14px;">We can build your entire campaign from a 3D file or a flat sketch before you sew a single button. Test which designs go viral on social media before committing to mass production. Eliminate unsold inventory risk — the single biggest killer of emerging fashion brands in India.</p>
+        <a href="#contact" class="pf-link" style="margin-top:22px;color:var(--gold);">
+          Talk to us about Pre-Sale Campaigns
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="mf-icon">DESIGN<br>↓<br>FILM<br>↓<br>SELL</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="work" class="sec sec-pad">
+  <div class="sec-head fade">
+    <div><p class="sec-label">Arri Alexa LogC Pipeline</p><h2>Portfolio</h2></div>
+    <p class="note">Spec work and founding client cuts, each demonstrating a distinct production capability.</p>
+  </div>
+  <div class="pf-grid">
+
+    <div class="pf-card wide fade" onclick="window.openYT('wtb_caN_xxE')" style="cursor:pointer;" role="button" tabindex="0">
+      <span class="pf-badge">Featured Project</span>
+      <div class="pf-thumb">
+        <img src="latent_space_poster.jpg" alt="The Latent Space" onerror="this.style.background='#1a1a2e';this.style.display='block'">
+        <div class="pf-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="pf-info">
+        <div class="pf-meta"><span class="pf-tag">World-Building / Music</span><span class="pf-date">3:12 Extended Cut</span></div>
+        <h3 class="pf-title">The Latent Space</h3>
+        <p class="pf-desc">A 3-minute journey into a synthetic cyber-western universe — complex lore, consistent band identity, and synchronized AI scoring.</p>
+        <a href="https://www.youtube.com/watch?v=wtb_caN_xxE" target="_blank" rel="noopener" class="pf-link" onclick="event.stopPropagation()">
+          Watch on YouTube
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="pf-card fade d1" onclick="window.openYT('BisV0T0sgBY')" style="cursor:pointer;" role="button" tabindex="0">
+      <div class="pf-thumb">
+        <img src="hublot_poster.jpg" alt="Hublot: Precision Motion" onerror="this.style.background='#1a1209';this.style.display='block'">
+        <div class="pf-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="pf-info">
+        <div class="pf-meta"><span class="pf-tag">Luxury Horology &amp; High-Speed Edit</span><span class="pf-date">SC.03 · Spec</span></div>
+        <h3 class="pf-title">Hublot: Precision Motion</h3>
+        <p class="pf-desc">Refractive light, impossible geometry, and high-speed kinetic editing. A speculative concept study demonstrating what luxury horology looks like beyond the constraints of physical filming.</p>
+      </div>
+    </div>
+
+    <!-- Vanessa Ryan: 3-film suite -->
+    <div class="pf-card fade d2" onclick="window.openYT('oGQrQCR7arU')" style="cursor:pointer;" role="button" tabindex="0">
+      <div class="pf-thumb">
+        <img src="vanessa_poster.jpg" alt="Elemental Alchemy" onerror="this.style.background='#1a1218';this.style.display='block'">
+        <div class="pf-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="pf-info">
+        <div class="pf-meta"><span class="pf-tag">Atmospheric Integration</span><span class="pf-date">2026.02 · Founding Client</span></div>
+        <h3 class="pf-title">Elemental Alchemy</h3>
+        <p class="pf-desc">Atmospheric integration and visual cohesion — a character placed across elemental environments with seamless lighting continuity.</p>
+      </div>
+    </div>
+
+    <div class="pf-card fade d3" onclick="window.openYT('SAazPRLlhdE')" style="cursor:pointer;" role="button" tabindex="0">
+      <div class="pf-thumb">
+        <img src="vanessa_poster2.jpg" alt="Elemental Alchemy II" onerror="this.style.background='#1a1218';this.style.display='block'">
+        <div class="pf-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="pf-info">
+        <div class="pf-meta"><span class="pf-tag">Visual Cohesion</span><span class="pf-date">2026.02 · Founding Client</span></div>
+        <h3 class="pf-title">Elemental Alchemy II</h3>
+        <p class="pf-desc">A second chapter in the Vanessa Ryan universe — the same identity, a new world. Demonstrating character consistency across radically different environments.</p>
+      </div>
+    </div>
+
+    <div class="pf-card fade d4" onclick="window.openYT('KYn0HM_DDuw')" style="cursor:pointer;" role="button" tabindex="0">
+      <div class="pf-thumb">
+        <img src="scarlet_poster.jpg" alt="The Scarlet Bride" onerror="this.style.background='#180a0a';this.style.display='block'">
+        <div class="pf-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="pf-info">
+        <div class="pf-meta"><span class="pf-tag">High-Fashion Cinematography</span><span class="pf-date">2026.02 · Founding Client</span></div>
+        <h3 class="pf-title">The Scarlet Bride</h3>
+        <p class="pf-desc">A high-fashion editorial pushed into cinematic territory. Mood, colour grading, and identity engineering for a Mumbai boutique's most ambitious garment.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- THE LATENT SPACE -->
+<section id="latent" class="sec sec-pad">
+  <div class="ls-glow" aria-hidden="true"></div>
+  <div class="ls-head fade">
+    <div>
+      <p class="ls-label">Internal R&amp;D · Band Project</p>
+      <h2 class="ls-h2">The Latent<br>Space</h2>
+    </div>
+    <div class="ls-lore">
+      <p>When there's no client brief, we give ourselves the hardest one. The Latent Space is VibeCut's AI band — pushing every boundary of the pipeline: character consistency, world-building, live performance simulation, and synchronized original scoring.</p>
+      <p>This is what our technology looks like at full creative stretch.</p>
+      <span class="ls-badge">VibeCut Internal R&amp;D Lab</span>
+    </div>
+  </div>
+  <div class="ls-grid fade d1">
+
+    <div class="ls-card wide" onclick="window.openYT('wtb_caN_xxE')" style="cursor:pointer;" role="button" tabindex="0">
+      <div class="ls-thumb">
+        <img src="latent_space_poster.jpg" alt="AI Baby — The Latent Space" onerror="this.style.background='linear-gradient(135deg,#0a0a1e,#0d1a1a)';this.style.display='block'">
+        <div class="ls-tgrad"></div>
+        <div class="ls-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="#00c8ff"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+      <div class="ls-info">
+        <p class="ls-tag">Music Video · Extended Cut · 3:12</p>
+        <h3 class="ls-title">AI Baby</h3>
+        <p class="ls-desc">The debut single. A full cinematic world — cyber-western universe, lore-consistent characters, AI-composed score, and synthetic performance sequences. Shot zero. Cost zero. Compromised nothing.</p>
+        <a href="https://www.youtube.com/watch?v=wtb_caN_xxE" target="_blank" rel="noopener" class="ls-link" onclick="event.stopPropagation()">
+          Watch on YouTube
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="ls-card" style="cursor:default;">
+      <div class="ls-thumb" style="background:linear-gradient(135deg,#0d0a1e,#1a0d1a);display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;opacity:.18;pointer-events:none;">
+          <p style="font-family:var(--fd);font-size:44px;letter-spacing:.08em;color:var(--cyan);">02</p>
+          <p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px;">Next Single</p>
+        </div>
+      </div>
+      <div class="ls-info">
+        <p class="ls-tag">Music Video · In Production</p>
+        <h3 class="ls-title" style="opacity:.3;">Coming Soon</h3>
+        <p class="ls-desc" style="opacity:.3;">The next chapter in the Latent Space universe. TikTok-first rollout.</p>
+      </div>
+    </div>
+
+    <div class="ls-card ls-roster" style="cursor:default;">
+      <div class="ls-info" style="height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:32px 24px;">
+        <div>
+          <p class="ls-tag" style="margin-bottom:20px;">Band Members</p>
+          <div class="member"><p class="member-name">GEM-N-I</p><p class="member-role">Orchestration &amp; Direction</p></div>
+          <div class="member"><p class="member-name">RIFF CACHE</p><p class="member-role">Guitars &amp; Production</p></div>
+          <div class="member"><p class="member-name">NEURAL RYDER</p><p class="member-role">Rhythm &amp; World Logic</p></div>
+          <div class="member"><p class="member-name">VOX NULL</p><p class="member-role">Synth, Lyric &amp; Lore</p></div>
+        </div>
+        <p style="font-size:12px;line-height:1.7;color:var(--muted);margin-top:24px;font-style:italic;">"Four AIs. One band. No rehearsals required."</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT / BOOKING -->
+<section id="contact" class="sec sec-pad">
+  <div class="contact-glow" aria-hidden="true"></div>
+  <div class="sec-head fade">
+    <div><p class="sec-label">Taking Select Projects · Q2 2026</p><h2>Ready to Build<br>the Impossible?</h2></div>
+  </div>
+  <div class="contact-grid fade d1">
+    <div>
+      <div class="avail"><span class="avail-dot"></span>Studio Online · Worldwide</div>
+      <p class="contact-copy">Whether you're an independent artist, emerging fashion brand, or an established company ready to explore what AI production can actually do — let's ship a cinematic cut together.</p>
+      <p class="contact-hint">Response time: ~24 hours.</p>
+      <div>
+        <div class="pitch-item">
+          <div class="pitch-num">01</div>
+          <div><p class="pitch-title">Cinematography-First Approach</p><p class="pitch-desc">Every frame is directed, not generated. Human creative intent drives the AI pipeline from script to final cut.</p></div>
+        </div>
+        <div class="pitch-item">
+          <div class="pitch-num">02</div>
+          <div><p class="pitch-title">Integrated Sound Design</p><p class="pitch-desc">Original AI-scored audio, SFX, and voice — a complete cinematic deliverable, not just a visual asset.</p></div>
+        </div>
+        <div class="pitch-item">
+          <div class="pitch-num">03</div>
+          <div><p class="pitch-title">Identity Engineering</p><p class="pitch-desc">100% character and brand consistency across every frame. No continuity errors. No re-casting. No compromises.</p></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-name">Your Name</label>
+            <input id="f-name" name="f-name" type="text" class="form-input" placeholder="Arjun Kapoor" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-brand">Brand / Company</label>
+            <input id="f-brand" name="f-brand" type="text" class="form-input" placeholder="Your Brand" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-email">Email Address</label>
+          <input id="f-email" name="email" type="email" class="form-input" placeholder="you@brand.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-type">Project Type</label>
+          <select id="f-type" name="f-type" class="form-select form-input">
+            <option value="">Select a direction...</option>
+            <option>Brand / Product Film</option>
+            <option>Fashion Identity Campaign</option>
+            <option>Pre-Sale / Concept Validation</option>
+            <option>Music Video</option>
+            <option>Social Media Content Series</option>
+            <option>Something Else Entirely</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-brief">Tell Us the Vibe</label>
+          <textarea id="f-brief" name="f-brief" class="form-textarea" placeholder="What are you building? What's the brief, the feeling, the audience? The more specific, the better the cut."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send the Brief →</button>
+        <p class="form-note">Response within 24 hours &middot; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2a424f4646456a5c43484f495f5e044e4f59434d44">[email&#160;protected]</a></p>
+      </form>
+      <div id="form-success">
+        <h3>Request Received.</h3>
+        <p>Check your inbox. We will reach out to discuss the vibe.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+
+
+
+<footer>
+  <div class="foot-logo">VibeCut.Design</div>
+  <div class="foot-info">
+    AI Advertising Studio · Remote Worldwide<br>
+    <a href="mailto:hello@vibecut.design">hello@vibecut.design</a>
+  </div>
+  <ul class="foot-links">
+    <li><a href="https://x.com/CutVibe" target="_blank" rel="noopener">X / Twitter</a></li>
+    <li><a href="https://www.instagram.com/vibecut.design/" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="#contact">Start a Project</a></li>
+  </ul>
+  <div class="foot-legal">
+    <p>© 2026 VibeCut Studio. All Cuts Reserved.</p>
+    <p>VibeCut Studio is an independent creative entity. All brand names referenced are property of their respective owners. Speculative work is for conceptual demonstration only.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
