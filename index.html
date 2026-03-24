@@ -510,8 +510,23 @@
       .ls-head { flex-direction: column; }
       .pf-grid { grid-template-columns: 1fr; }
       .pf-card.wide { grid-column: span 1; }
+      /* Hide eyebrow on mobile — wraps badly at narrow widths */
+      .eyebrow { display: none; }
+      /* Reduce hero bottom padding so content isn't too low */
+      .hero { padding-bottom: 48px; }
+      /* Tighten hero sub text */
+      .hero-sub { font-size: 14px; margin-bottom: 28px; }
+      /* Stack CTA buttons vertically on very small screens */
+      .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .btn-gold { width: 100%; text-align: center; }
     }
-  </style>
+  
+    @media (max-width: 600px) {
+      .eyebrow { display: none; }
+      .hero { padding-bottom: 48px; }
+      .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .btn-gold { width: 100%; text-align: center; }
+    }</style>
 </head>
 <body>
 
@@ -961,7 +976,7 @@
     <li><a href="#contact">Start a Project</a></li>
   </ul>
   <div class="foot-legal">
-    <p>&#169; 2026 VibeCut Studio. All Cuts Reserved.</p>
+    <p>© 2026 VibeCut Studio. All Cuts Reserved.</p>
     <p>VibeCut Studio is an independent creative entity. All brand names referenced are property of their respective owners. Speculative work is for conceptual demonstration only.</p>
   </div>
 </footer>

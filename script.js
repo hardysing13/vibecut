@@ -156,23 +156,35 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Escape') window.closeYT();
   });
 
-  // Wire carousel slides — both click AND touchend for iPhone
-  document.querySelectorAll('.car-slide[data-yt]').forEach(function(el) {
-    el.addEventListener('click', function() { window.openYT(el.dataset.yt); });
+  // Tap detection helper — only fires openYT if finger didn't move (not a scroll)
+  function addTapToPlay(el, ytId) {
+    var touchStartY = 0;
+    var touchStartX = 0;
+    el.addEventListener('click', function() { window.openYT(ytId); });
+    el.addEventListener('touchstart', function(e) {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
     el.addEventListener('touchend', function(e) {
-      // Only fire if not a scroll gesture
-      e.preventDefault();
-      window.openYT(el.dataset.yt);
+      var dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+      var dx = Math.abs(e.changedTouches[0].clientX - touchStartX);
+      // Only fire if finger moved less than 10px — genuine tap, not scroll
+      if (dy < 10 && dx < 10) {
+        e.preventDefault();
+        window.openYT(ytId);
+      }
     }, { passive: false });
+  }
+
+  // Wire carousel slides
+  document.querySelectorAll('.car-slide[data-yt]').forEach(function(el) {
+    addTapToPlay(el, el.dataset.yt);
   });
 
-  // Wire portfolio + latent space cards — both click AND touchend
+  // Wire portfolio + latent space cards
   document.querySelectorAll('[onclick*="openYT"]').forEach(function(el) {
-    el.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      var match = el.getAttribute('onclick').match(/openYT\('([^']+)'\)/);
-      if (match) window.openYT(match[1]);
-    }, { passive: false });
+    var match = el.getAttribute('onclick').match(/openYT\('([^']+)'\)/);
+    if (match) addTapToPlay(el, match[1]);
   });
 });
 
