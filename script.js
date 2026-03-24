@@ -256,19 +256,42 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 })();
 
-/* ─── SCROLL FADE-IN ────────────────────────────────────────────*/
+/* ─── SCROLL FADE-IN ────────────────────────────────────────────
+   Hero-body gets animate immediately — it's always above the fold.
+   Everything else uses IntersectionObserver with a 500ms safety
+   fallback that animates anything still in the viewport.
+────────────────────────────────────────────────────────────────*/
 (function() {
   var els = document.querySelectorAll('.fade');
+
+  // Hero body is always visible — animate it right away
+  var heroBody = document.querySelector('.hero-body');
+  if (heroBody) heroBody.classList.add('animate');
+
   if (!('IntersectionObserver' in window)) {
     els.forEach(function(el) { el.classList.add('animate'); });
     return;
   }
+
   var obs = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
       if (e.isIntersecting) { e.target.classList.add('animate'); obs.unobserve(e.target); }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
+
   els.forEach(function(el) { obs.observe(el); });
+
+  // Safety net: after 600ms, animate anything still in the viewport
+  setTimeout(function() {
+    els.forEach(function(el) {
+      if (!el.classList.contains('animate')) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('animate');
+        }
+      }
+    });
+  }, 600);
 })();
 
 /* ─── CONTACT FORM — EmailJS ────────────────────────────────────
