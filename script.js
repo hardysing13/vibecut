@@ -1,12 +1,18 @@
-/* ─── CUSTOM CURSOR ────────────────────────────────────────────*/
+/* ─── CUSTOM CURSOR ────────────────────────────────────────────
+   left/top only. No CSS transform. No will-change. No opacity.
+   Parked at -200px until first real mousemove.
+────────────────────────────────────────────────────────────────*/
 (function() {
   var dot  = document.getElementById('cur-dot');
   var ring = document.getElementById('cur-ring');
+  if (!dot || !ring) return;
+
   var mx = -200, my = -200;
   var rx = -200, ry = -200;
 
   document.addEventListener('mousemove', function(e) {
-    mx = e.clientX; my = e.clientY;
+    mx = e.clientX;
+    my = e.clientY;
   });
 
   document.querySelectorAll('a, button, [role="button"], .car-slide, .pf-card, .ls-card, .mf-card').forEach(function(el) {
@@ -15,9 +21,12 @@
   });
 
   function tick() {
-    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-    rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
-    ring.style.left = Math.round(rx) + 'px'; ring.style.top = Math.round(ry) + 'px';
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+    rx += (mx - rx) * 0.13;
+    ry += (my - ry) * 0.13;
+    ring.style.left = Math.round(rx) + 'px';
+    ring.style.top  = Math.round(ry) + 'px';
     requestAnimationFrame(tick);
   }
   tick();
@@ -26,9 +35,79 @@
 /* ─── NAV SCROLL STATE ─────────────────────────────────────────*/
 (function() {
   var nav = document.getElementById('nav');
+  if (!nav) return;
   window.addEventListener('scroll', function() {
     nav.classList.toggle('scrolled', window.scrollY > 50);
   }, { passive: true });
+})();
+
+/* ─── LOGO SCISSOR ANIMATION ───────────────────────────────────
+   JS-driven so it never creates a CSS stacking context.
+   Runs once on load. Uses opacity only — no transform on fixed elements.
+────────────────────────────────────────────────────────────────*/
+(function() {
+  function fadeIn(selector, delay) {
+    var el = document.querySelector(selector);
+    if (!el) return;
+    el.style.opacity = '0';
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.4s ease';
+      el.style.opacity = '1';
+    }, delay);
+  }
+  // Stagger the logo parts in
+  fadeIn('.vc-blade-l',   200);
+  fadeIn('.vc-blade-r',   200);
+  fadeIn('.vc-frame-tl',  700);
+  fadeIn('.vc-frame-tr',  750);
+  fadeIn('.vc-frame-bl',  800);
+  fadeIn('.vc-frame-br',  850);
+  fadeIn('.vc-glow',      900);
+})();
+
+/* ─── CATS TICKER — JS scroll, no CSS animation ────────────────
+   CSS transform animation on .cats-list creates a stacking context
+   in Safari that kills position:fixed cursor elements.
+   This JS version moves the list via scrollLeft instead.
+────────────────────────────────────────────────────────────────*/
+(function() {
+  var wrap = document.querySelector('.cats-track-wrap');
+  var list = document.querySelector('.cats-list');
+  if (!wrap || !list) return;
+
+  var speed = 0.5; // px per frame
+  var pos = 0;
+  var paused = false;
+  var halfWidth = 0;
+
+  function getHalfWidth() {
+    // List is doubled — half is one full set of items
+    halfWidth = list.scrollWidth / 2;
+  }
+
+  wrap.addEventListener('mouseenter', function() { paused = true; });
+  wrap.addEventListener('mouseleave', function() { paused = false; });
+
+  function tickTicker() {
+    if (!paused) {
+      pos += speed;
+      if (halfWidth > 0 && pos >= halfWidth) {
+        pos = 0; // seamless reset
+      }
+      list.style.transform = 'translateX(-' + pos + 'px)';
+    }
+    requestAnimationFrame(tickTicker);
+  }
+
+  // Get width after fonts load
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() {
+      getHalfWidth();
+      tickTicker();
+    });
+  } else {
+    setTimeout(function() { getHalfWidth(); tickTicker(); }, 500);
+  }
 })();
 
 /* ─── YOUTUBE MODAL ────────────────────────────────────────────*/
@@ -46,7 +125,8 @@ window.closeYT = function() {
   var modal = document.getElementById('yt-modal');
   var frame = document.getElementById('yt-frame');
   if (!modal || !frame) return;
-  modal.classList.remove('on'); frame.src = '';
+  modal.classList.remove('on');
+  frame.src = '';
   document.body.style.overflow = '';
 };
 
@@ -54,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var closeBtn = document.getElementById('yt-close');
   var modal    = document.getElementById('yt-modal');
   if (closeBtn) closeBtn.addEventListener('click', window.closeYT);
-  if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) window.closeYT(); });
+  if (modal)    modal.addEventListener('click', function(e) { if (e.target === modal) window.closeYT(); });
   document.querySelectorAll('.car-slide[data-yt]').forEach(function(el) {
     el.addEventListener('click', function() { window.openYT(el.dataset.yt); });
   });
@@ -106,7 +186,8 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') windo
 (function() {
   var els = document.querySelectorAll('.fade');
   if (!('IntersectionObserver' in window)) {
-    els.forEach(function(el) { el.classList.add('animate'); }); return;
+    els.forEach(function(el) { el.classList.add('animate'); });
+    return;
   }
   var obs = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
@@ -117,20 +198,12 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') windo
 })();
 
 /* ─── CONTACT FORM — EmailJS ────────────────────────────────────
-   Credentials from your working Gemini site:
-     Public Key:           2WkxcVwk1FHP0Sgyh
-     Service ID:           service_57k6qhf
-     Template → you:       template_70u9yvd   (receives the brief)
-     Template → sender:    template_iarwp0d   (auto-confirmation)
-
-   NOTE: Your EmailJS template variables must match the form field
-   names below. Current field IDs: f-name, f-brand, f-email,
-   f-type, f-brief. If your template uses different variable names
-   (e.g. {{email}} not {{f-email}}) update the IDs here to match.
+   Service:  service_57k6qhf
+   Template → you:     template_70u9yvd
+   Template → sender:  template_iarwp0d
+   Public Key:         2WkxcVwk1FHP0Sgyh
 ────────────────────────────────────────────────────────────────*/
 document.addEventListener('DOMContentLoaded', function() {
-
-  /* Load EmailJS SDK dynamically — avoids Cloudflare inline script issues */
   var s = document.createElement('script');
   s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
   s.onload = function() { emailjs.init('2WkxcVwk1FHP0Sgyh'); };
@@ -139,22 +212,17 @@ document.addEventListener('DOMContentLoaded', function() {
   var form    = document.getElementById('contact-form');
   var success = document.getElementById('form-success');
   if (!form) return;
-
   var btn = form.querySelector('.form-submit');
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-
     var userEmail = (form.querySelector('#f-email') || {}).value;
     if (!userEmail || !userEmail.trim()) return;
     userEmail = userEmail.trim();
-
     if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
-    /* Send brief notification to hello@vibecut.design */
     emailjs.sendForm('service_57k6qhf', 'template_70u9yvd', form)
       .then(function() {
-        /* Send auto-confirmation back to the person who submitted */
         return emailjs.send('service_57k6qhf', 'template_iarwp0d', {
           to_email: userEmail,
           to_name:  userEmail.split('@')[0]
