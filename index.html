@@ -115,12 +115,40 @@
       color: var(--white); text-decoration: none;
       display: flex; align-items: center; gap: 10px;
     }
-    .nav-mark {
-      width: 27px; height: 27px;
-      border: 1.5px solid var(--gold);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; color: var(--gold); letter-spacing: 0;
+    .nav-mark { display: flex; align-items: center; }
+    .nav-mark svg { overflow: visible; }
+    /* Scissor-cut intro — plays once on load */
+    @keyframes vc-blade-l {
+      0%   { transform: rotate(-30deg); opacity: 0; }
+      20%  { opacity: 1; }
+      100% { transform: rotate(0deg); opacity: 1; }
     }
+    @keyframes vc-blade-r {
+      0%   { transform: rotate(30deg); opacity: 0; }
+      20%  { opacity: 1; }
+      100% { transform: rotate(0deg); opacity: 1; }
+    }
+    @keyframes vc-frame {
+      0%,50% { opacity: 0; }
+      100%   { opacity: 1; }
+    }
+    @keyframes vc-glow {
+      0%,100% { filter: drop-shadow(0 0 3px rgba(0,200,255,0.35)); }
+      50%     { filter: drop-shadow(0 0 7px rgba(0,200,255,0.6)); }
+    }
+    .vc-blade-l {
+      transform-origin: 50% 95%;
+      animation: vc-blade-l 0.65s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
+    }
+    .vc-blade-r {
+      transform-origin: 50% 95%;
+      animation: vc-blade-r 0.65s cubic-bezier(0.34,1.4,0.64,1) 0.2s both;
+    }
+    .vc-frame-tl { animation: vc-frame 0.4s ease 0.85s both; }
+    .vc-frame-tr { animation: vc-frame 0.4s ease 0.9s both; }
+    .vc-frame-bl { animation: vc-frame 0.4s ease 0.95s both; }
+    .vc-frame-br { animation: vc-frame 0.4s ease 1.0s both; }
+    .vc-glow { animation: vc-glow 3s ease-in-out 1.2s infinite; }
     .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
     .nav-links a {
       font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
@@ -203,14 +231,37 @@
 
     /* ── CATEGORIES ───────────────────────────────────────────── */
     .cats {
-      padding: 26px 48px; background: var(--deep);
+      padding: 0; background: var(--deep);
       border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; overflow: hidden;
+      display: flex; align-items: center;
+      overflow: hidden; height: 48px;
     }
-    .cats-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; flex-shrink: 0; margin-right: 40px; }
-    .cats-list { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
-    .cat { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(245,242,236,.2); white-space: nowrap; font-weight: 500; transition: color .3s; }
-    .cat:hover { color: rgba(245,242,236,.5); }
+    .cats-label {
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted2); white-space: nowrap; flex-shrink: 0;
+      padding: 0 24px 0 48px; border-right: 1px solid var(--border);
+      height: 100%; display: flex; align-items: center;
+    }
+    .cats-track-wrap {
+      flex: 1; overflow: hidden; position: relative; height: 100%;
+    }
+    .cats-track-wrap::before, .cats-track-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; z-index: 2; width: 40px; pointer-events: none;
+    }
+    .cats-track-wrap::before { left: 0; background: linear-gradient(to right, var(--deep), transparent); }
+    .cats-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--deep), transparent); }
+    .cats-list {
+      display: flex; align-items: center; gap: 28px;
+      white-space: nowrap; animation: cats-scroll 28s linear infinite;
+      width: max-content; height: 100%;
+    }
+    .cats-track-wrap:hover .cats-list { animation-play-state: paused; }
+    @keyframes cats-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .cat { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(245,242,236,.55); white-space: nowrap; font-weight: 500; transition: color .3s; flex-shrink: 0; }
+    .cat:hover { color: rgba(245,242,236,.9); }
     .cat-sep { width: 3px; height: 3px; background: var(--borderB); border-radius: 50%; flex-shrink: 0; }
 
     /* ── CAROUSEL ─────────────────────────────────────────────── */
@@ -283,7 +334,7 @@
       transition: border-color .3s;
     }
     .mf-card:hover { border-color: rgba(201,168,76,.28); }
-    .mf-num { font-family: var(--fd); font-size: 66px; color: rgba(201,168,76,.11); line-height: 1; margin-bottom: 24px; letter-spacing: .04em; }
+    .mf-num { font-family: var(--fd); font-size: 66px; color: rgba(201,168,76,.38); line-height: 1; margin-bottom: 24px; letter-spacing: .04em; }
     .mf-hook { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
     .mf-title { font-family: var(--fs); font-size: 21px; color: var(--white); margin-bottom: 14px; line-height: 1.3; }
     .mf-body { font-size: 14px; line-height: 1.75; color: var(--muted2); }
@@ -405,7 +456,7 @@
     .contact-copy { font-size: 14px; line-height: 1.8; color: var(--muted2); margin-bottom: 6px; }
     .contact-hint { font-size: 13px; line-height: 1.8; color: var(--muted); margin-bottom: 40px; }
     .pitch-item { display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--border); }
-    .pitch-num { font-family: var(--fd); font-size: 30px; color: rgba(201,168,76,.16); line-height: 1; flex-shrink: 0; width: 38px; }
+    .pitch-num { font-family: var(--fd); font-size: 30px; color: rgba(201,168,76,.42); line-height: 1; flex-shrink: 0; width: 38px; }
     .pitch-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
     .pitch-desc { font-size: 13px; line-height: 1.65; color: var(--muted2); }
     .form-group { margin-bottom: 18px; }
@@ -475,7 +526,7 @@
       #nav { padding: 18px 24px; }
       .nav-links { display: none; }
       .hero, .sec-pad { padding-left: 24px; padding-right: 24px; }
-      .cats { padding: 22px 24px; }
+      .cats-label { padding: 0 12px 0 20px; }
       .mf-grid { grid-template-columns: 1fr; }
       .mf-featured { grid-column: span 1; grid-template-columns: 1fr; }
       .pf-grid { grid-template-columns: 1fr 1fr; }
@@ -514,14 +565,35 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
-    <span class="nav-mark">VC</span>VibeCut Studio
+    <span class="nav-mark">
+      <svg width="36" height="40" viewBox="0 0 36 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vcg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#00e5ff"/>
+            <stop offset="100%" stop-color="#0055ff"/>
+          </linearGradient>
+        </defs>
+        <!-- Film frame corner brackets (gold) -->
+        <path class="vc-frame-tl" d="M1 1 L1 9 M1 1 L9 1" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <path class="vc-frame-tr" d="M35 1 L35 9" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <path class="vc-frame-bl" d="M1 39 L1 31 M1 39 L9 39" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <path class="vc-frame-br" d="M35 39 L35 31 M35 39 L27 39" stroke="rgba(201,168,76,0.75)" stroke-width="1.8" stroke-linecap="square" fill="none"/>
+        <!-- V left blade (cyan) -->
+        <path class="vc-blade-l vc-glow" d="M5 4 L18 36" stroke="#00e5ff" stroke-width="4" stroke-linecap="round"/>
+        <!-- V right blade (blue) -->
+        <path class="vc-blade-r" d="M31 4 L18 36" stroke="#0055ff" stroke-width="4" stroke-linecap="round"/>
+        <!-- Inner highlight -->
+        <path class="vc-blade-l" d="M7 4 L18 32" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-linecap="round"/>
+        <path class="vc-blade-r" d="M29 4 L18 32" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </span>VibeCut Studio
   </a>
   <ul class="nav-links">
     <li><a href="#showreel">Showreel</a></li>
     <li><a href="#work">Portfolio</a></li>
     <li><a href="#latent">The Latent Space</a></li>
     <li><a href="#manifesto">Why AI</a></li>
-    <li><a href="mailto:hello@vibecut.design">hello@vibecut.design</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#c7afa2ababa887b1aea5a2a4b2b3e9a3a2b4aea0a9"><span class="__cf_email__" data-cfemail="137b767f7f7c53657a71767066673d7776607a747d">[email&#160;protected]</span></a></li>
   </ul>
   <a href="#contact" class="nav-cta">Start a Project</a>
 </nav>
@@ -533,7 +605,7 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-body fade">
-    <p class="eyebrow">Mumbai · AI-Native Studio · Est. 2025</p>
+    <p class="eyebrow">AI-Native Studio · Global Reach · Est. 2025</p>
     <h1>Direct the Vibe.<br><em>Make the Cut.</em></h1>
     <p class="hero-sub">An AI-native studio for the global stage. Engineering cinematic films for ambitious brands — removing the technical ceilings of what can be filmed.</p>
     <div class="hero-btns">
@@ -550,15 +622,29 @@
 <!-- CATEGORIES STRIP -->
 <div class="cats">
   <span class="cats-label">We Serve</span>
-  <div class="cats-list">
-    <span class="cat">Luxury Goods</span><span class="cat-sep"></span>
-    <span class="cat">Fashion &amp; Identity</span><span class="cat-sep"></span>
-    <span class="cat">FMCG &amp; D2C</span><span class="cat-sep"></span>
-    <span class="cat">Fintech</span><span class="cat-sep"></span>
-    <span class="cat">Music &amp; Entertainment</span><span class="cat-sep"></span>
-    <span class="cat">Tech Brands</span><span class="cat-sep"></span>
-    <span class="cat">Hospitality</span><span class="cat-sep"></span>
-    <span class="cat">Beauty &amp; Wellness</span>
+  <div class="cats-track-wrap">
+    <div class="cats-list">
+      <span class="cat">Luxury Goods</span><span class="cat-sep"></span>
+      <span class="cat">Fashion &amp; Identity</span><span class="cat-sep"></span>
+      <span class="cat">FMCG &amp; D2C</span><span class="cat-sep"></span>
+      <span class="cat">Fintech</span><span class="cat-sep"></span>
+      <span class="cat">Music &amp; Entertainment</span><span class="cat-sep"></span>
+      <span class="cat">Tech Brands</span><span class="cat-sep"></span>
+      <span class="cat">Hospitality</span><span class="cat-sep"></span>
+      <span class="cat">Beauty &amp; Wellness</span><span class="cat-sep"></span>
+      <span class="cat">Automotive</span><span class="cat-sep"></span>
+      <span class="cat">Real Estate</span><span class="cat-sep"></span>
+      <span class="cat">Luxury Goods</span><span class="cat-sep"></span>
+      <span class="cat">Fashion &amp; Identity</span><span class="cat-sep"></span>
+      <span class="cat">FMCG &amp; D2C</span><span class="cat-sep"></span>
+      <span class="cat">Fintech</span><span class="cat-sep"></span>
+      <span class="cat">Music &amp; Entertainment</span><span class="cat-sep"></span>
+      <span class="cat">Tech Brands</span><span class="cat-sep"></span>
+      <span class="cat">Hospitality</span><span class="cat-sep"></span>
+      <span class="cat">Beauty &amp; Wellness</span><span class="cat-sep"></span>
+      <span class="cat">Automotive</span><span class="cat-sep"></span>
+      <span class="cat">Real Estate</span>
+    </div>
   </div>
 </div>
 
@@ -856,20 +942,20 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="f-name">Your Name</label>
-            <input id="f-name" type="text" class="form-input" placeholder="Arjun Kapoor" required />
+            <input id="f-name" name="f-name" type="text" class="form-input" placeholder="Arjun Kapoor" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="f-brand">Brand / Company</label>
-            <input id="f-brand" type="text" class="form-input" placeholder="Your Brand" />
+            <input id="f-brand" name="f-brand" type="text" class="form-input" placeholder="Your Brand" />
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" for="f-email">Email Address</label>
-          <input id="f-email" type="email" class="form-input" placeholder="you@brand.com" required />
+          <input id="f-email" name="f-email" type="email" class="form-input" placeholder="you@brand.com" required />
         </div>
         <div class="form-group">
           <label class="form-label" for="f-type">Project Type</label>
-          <select id="f-type" class="form-select form-input">
+          <select id="f-type" name="f-type" class="form-select form-input">
             <option value="">Select a direction...</option>
             <option>Brand / Product Film</option>
             <option>Fashion Identity Campaign</option>
@@ -881,10 +967,10 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="f-brief">Tell Us the Vibe</label>
-          <textarea id="f-brief" class="form-textarea" placeholder="What are you building? What's the brief, the feeling, the audience? The more specific, the better the cut."></textarea>
+          <textarea id="f-brief" name="f-brief" class="form-textarea" placeholder="What are you building? What's the brief, the feeling, the audience? The more specific, the better the cut."></textarea>
         </div>
         <button type="submit" class="form-submit">Send the Brief →</button>
-        <p class="form-note">Response within 24 hours &middot; hello@vibecut.design</p>
+        <p class="form-note">Response within 24 hours &middot; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b3dbd6dfdfdcf3c5dad1d6d0c6c79dd7d6c0dad4dd">[email&#160;protected]</a></p>
       </form>
       <div id="form-success">
         <h3>Request Received.</h3>
@@ -898,20 +984,8 @@
 <footer>
   <div class="foot-logo">VibeCut.Design</div>
   <div class="foot-info">
-    AI Advertising Studio · Remote Worldwide · Mumbai Hub<br>
-    <a href="mailto:hello@vibecut.design">hello@vibecut.design</a>
+    AI Advertising Studio · Remote Worldwide<br>
+    <a href="/cdn-cgi/l/email-protection#036b666f6f6c43756a61666076772d6766706a646d"><span class="__cf_email__" data-cfemail="563e333a3a3916203f3433352322783233253f3138">[email&#160;protected]</span></a>
   </div>
   <ul class="foot-links">
-    <li><a href="https://x.com/CutVibe" target="_blank" rel="noopener">X / Twitter</a></li>
-    <li><a href="https://www.instagram.com/vibecut.design/" target="_blank" rel="noopener">Instagram</a></li>
-    <li><a href="#contact">Start a Project</a></li>
-  </ul>
-  <div class="foot-legal">
-    <p>© 2026 VibeCut Studio. All Cuts Reserved.</p>
-    <p>VibeCut Studio is an independent creative entity. All brand names referenced are property of their respective owners. Speculative work is for conceptual demonstration only.</p>
-  </div>
-</footer>
-
-<script src="script.js"></script>
-</body>
-</html>
+    <li><a href="https://x.com/CutVibe" target="_blank" rel="no
