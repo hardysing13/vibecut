@@ -4,7 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VibeCut Studio — AI Advertising & Identity</title>
-  <meta name="description" content="Mumbai's AI-native advertising studio. Cinematic films for ambitious brands. Boutique craftsmanship at synthetic speed." />
+  <meta name="description" content="AI-native advertising studio. Cinematic films for ambitious brands. Boutique craftsmanship at synthetic speed." />
+  <!-- Open Graph / WhatsApp / LinkedIn preview -->
+  <meta property="og:title" content="VibeCut Studio — AI Advertising &amp; Identity" />
+  <meta property="og:description" content="Direct the vibe. Make the cut. Cinematic AI production for the modern era." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vibecut.design/" />
+  <meta property="og:image" content="https://www.vibecut.design/og-vibecut.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="VibeCut Studio" />
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VibeCut Studio | AI Cinematography" />
+  <meta name="twitter:description" content="Direct the vibe. Make the cut. Cinematic AI production for the modern era." />
+  <meta name="twitter:image" content="https://www.vibecut.design/og-vibecut.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
@@ -519,6 +533,9 @@
       /* Stack CTA buttons vertically on very small screens */
       .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
       .btn-gold { width: 100%; text-align: center; }
+      /* Ghost button always readable on mobile over varied hero backgrounds */
+      .btn-ghost { color: rgba(245,242,236,0.85); }
+      .btn-ghost svg { stroke: rgba(245,242,236,0.85); }
     }
   
     @media (max-width: 600px) {
@@ -526,6 +543,9 @@
       .hero { padding-bottom: 48px; }
       .hero-btns { flex-direction: column; align-items: flex-start; gap: 14px; }
       .btn-gold { width: 100%; text-align: center; }
+      /* Ghost button always readable on mobile over varied hero backgrounds */
+      .btn-ghost { color: rgba(245,242,236,0.85); }
+      .btn-ghost svg { stroke: rgba(245,242,236,0.85); }
     }</style>
 </head>
 <body>
@@ -902,9 +922,9 @@
   </div>
   <div class="contact-grid fade d1">
     <div>
-      <div class="avail"><span class="avail-dot"></span>Studio Online · Mumbai</div>
+      <div class="avail"><span class="avail-dot"></span>Studio Online · Worldwide</div>
       <p class="contact-copy">Whether you're an independent artist, emerging fashion brand, or an established company ready to explore what AI production can actually do — let's ship a cinematic cut together.</p>
-      <p class="contact-hint">Response time: ~24 hours via Mumbai Studio.</p>
+      <p class="contact-hint">Response time: ~24 hours.</p>
       <div>
         <div class="pitch-item">
           <div class="pitch-num">01</div>
@@ -964,6 +984,7 @@
 </section>
 
 <!-- FOOTER -->
+
 <footer>
   <div class="foot-logo">VibeCut.Design</div>
   <div class="foot-info">
