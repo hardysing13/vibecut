@@ -1,8 +1,10 @@
 /* ─── CUSTOM CURSOR ────────────────────────────────────────────
-   left/top only. No CSS transform. No will-change. No opacity.
-   Parked at -200px until first real mousemove.
+   Desktop only — hidden on touch devices (no cursor on mobile).
 ────────────────────────────────────────────────────────────────*/
 (function() {
+  // Don't run cursor on touch-primary devices
+  if (window.matchMedia('(hover: none)').matches) return;
+
   var dot  = document.getElementById('cur-dot');
   var ring = document.getElementById('cur-ring');
   if (!dot || !ring) return;
@@ -41,13 +43,30 @@
   }, { passive: true });
 })();
 
-/* ─── LOGO SCISSOR ANIMATION ───────────────────────────────────
-   JS-driven so it never creates a CSS stacking context.
-   Runs once on load. Uses opacity only — no transform on fixed elements.
+/* ─── SMOOTH SCROLL FOR NAV LINKS ─────────────────────────────
+   iOS Safari sometimes ignores CSS scroll-behavior: smooth on
+   anchor links. This JS version works on all browsers.
 ────────────────────────────────────────────────────────────────*/
 (function() {
-  function fadeIn(selector, delay) {
-    var el = document.querySelector(selector);
+  document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var id = this.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+})();
+
+/* ─── LOGO FADE-IN ─────────────────────────────────────────────
+   JS opacity fade — no CSS animation = no stacking context.
+────────────────────────────────────────────────────────────────*/
+(function() {
+  function fadeIn(sel, delay) {
+    var el = document.querySelector(sel);
     if (!el) return;
     el.style.opacity = '0';
     setTimeout(function() {
@@ -55,68 +74,63 @@
       el.style.opacity = '1';
     }, delay);
   }
-  // Stagger the logo parts in
-  fadeIn('.vc-blade-l',   200);
-  fadeIn('.vc-blade-r',   200);
-  fadeIn('.vc-frame-tl',  700);
-  fadeIn('.vc-frame-tr',  750);
-  fadeIn('.vc-frame-bl',  800);
-  fadeIn('.vc-frame-br',  850);
-  fadeIn('.vc-glow',      900);
+  fadeIn('.vc-blade-l',  200);
+  fadeIn('.vc-blade-r',  200);
+  fadeIn('.vc-frame-tl', 700);
+  fadeIn('.vc-frame-tr', 760);
+  fadeIn('.vc-frame-bl', 820);
+  fadeIn('.vc-frame-br', 880);
+  fadeIn('.vc-glow',     940);
 })();
 
 /* ─── CATS TICKER — JS scroll, no CSS animation ────────────────
-   CSS transform animation on .cats-list creates a stacking context
-   in Safari that kills position:fixed cursor elements.
-   This JS version moves the list via scrollLeft instead.
+   CSS transform animations create stacking contexts that break
+   position:fixed cursor elements in Safari. JS-driven instead.
 ────────────────────────────────────────────────────────────────*/
 (function() {
   var wrap = document.querySelector('.cats-track-wrap');
   var list = document.querySelector('.cats-list');
   if (!wrap || !list) return;
 
-  var speed = 0.5; // px per frame
+  var speed = 0.5;
   var pos = 0;
   var paused = false;
   var halfWidth = 0;
 
-  function getHalfWidth() {
-    // List is doubled — half is one full set of items
-    halfWidth = list.scrollWidth / 2;
-  }
+  function measure() { halfWidth = list.scrollWidth / 2; }
 
   wrap.addEventListener('mouseenter', function() { paused = true; });
   wrap.addEventListener('mouseleave', function() { paused = false; });
+  // Touch: pause briefly on touch
+  wrap.addEventListener('touchstart', function() { paused = true; }, { passive: true });
+  wrap.addEventListener('touchend', function() { setTimeout(function() { paused = false; }, 1500); }, { passive: true });
 
-  function tickTicker() {
+  function tick() {
     if (!paused) {
       pos += speed;
-      if (halfWidth > 0 && pos >= halfWidth) {
-        pos = 0; // seamless reset
-      }
+      if (halfWidth > 0 && pos >= halfWidth) pos = 0;
       list.style.transform = 'translateX(-' + pos + 'px)';
     }
-    requestAnimationFrame(tickTicker);
+    requestAnimationFrame(tick);
   }
 
-  // Get width after fonts load
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function() {
-      getHalfWidth();
-      tickTicker();
-    });
+    document.fonts.ready.then(function() { measure(); tick(); });
   } else {
-    setTimeout(function() { getHalfWidth(); tickTicker(); }, 500);
+    setTimeout(function() { measure(); tick(); }, 500);
   }
 })();
 
-/* ─── YOUTUBE MODAL ────────────────────────────────────────────*/
+/* ─── YOUTUBE MODAL ────────────────────────────────────────────
+   openYT on window scope so inline onclick attributes work.
+   Touch events added so tapping works on iPhone.
+────────────────────────────────────────────────────────────────*/
 window.openYT = function(id) {
   if (!id || id.indexOf('REPLACE') === 0) return;
   var modal = document.getElementById('yt-modal');
   var frame = document.getElementById('yt-frame');
   if (!modal || !frame) return;
-  frame.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+  frame.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
   modal.classList.add('on');
   document.body.style.overflow = 'hidden';
 };
@@ -133,20 +147,41 @@ window.closeYT = function() {
 document.addEventListener('DOMContentLoaded', function() {
   var closeBtn = document.getElementById('yt-close');
   var modal    = document.getElementById('yt-modal');
+
   if (closeBtn) closeBtn.addEventListener('click', window.closeYT);
-  if (modal)    modal.addEventListener('click', function(e) { if (e.target === modal) window.closeYT(); });
+  if (modal) modal.addEventListener('click', function(e) {
+    if (e.target === modal) window.closeYT();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') window.closeYT();
+  });
+
+  // Wire carousel slides — both click AND touchend for iPhone
   document.querySelectorAll('.car-slide[data-yt]').forEach(function(el) {
     el.addEventListener('click', function() { window.openYT(el.dataset.yt); });
+    el.addEventListener('touchend', function(e) {
+      // Only fire if not a scroll gesture
+      e.preventDefault();
+      window.openYT(el.dataset.yt);
+    }, { passive: false });
+  });
+
+  // Wire portfolio + latent space cards — both click AND touchend
+  document.querySelectorAll('[onclick*="openYT"]').forEach(function(el) {
+    el.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      var match = el.getAttribute('onclick').match(/openYT\('([^']+)'\)/);
+      if (match) window.openYT(match[1]);
+    }, { passive: false });
   });
 });
-
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') window.closeYT(); });
 
 /* ─── CAROUSEL ─────────────────────────────────────────────────*/
 (function() {
   var track = document.getElementById('car-track');
   var dotsEl = document.getElementById('car-dots');
   if (!track || !dotsEl) return;
+
   var slides = track.querySelectorAll('.car-slide');
   var n = slides.length, cur = 0;
 
@@ -158,20 +193,47 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') windo
     for (var i = 0; i < pages(); i++) {
       var d = document.createElement('div');
       d.className = 'car-dot' + (i === 0 ? ' on' : '');
-      (function(idx) { d.addEventListener('click', function() { goTo(idx); }); })(i);
+      (function(idx) {
+        d.addEventListener('click', function() { goTo(idx); });
+        d.addEventListener('touchend', function(e) { e.preventDefault(); goTo(idx); }, { passive: false });
+      })(i);
       dotsEl.appendChild(d);
     }
   }
 
   function goTo(page) {
     cur = (page + pages()) % pages();
-    track.style.transform = 'translateX(-' + (cur * (slides[0].offsetWidth + 18) * vis()) + 'px)';
-    dotsEl.querySelectorAll('.car-dot').forEach(function(d, i) { d.classList.toggle('on', i === cur); });
+    var sw = slides[0].offsetWidth + 18;
+    track.style.transform = 'translateX(-' + (cur * sw * vis()) + 'px)';
+    dotsEl.querySelectorAll('.car-dot').forEach(function(d, i) {
+      d.classList.toggle('on', i === cur);
+    });
   }
 
-  var nb = document.getElementById('car-next'), pb = document.getElementById('car-prev');
-  if (nb) nb.addEventListener('click', function() { goTo(cur + 1); });
-  if (pb) pb.addEventListener('click', function() { goTo(cur - 1); });
+  var nb = document.getElementById('car-next');
+  var pb = document.getElementById('car-prev');
+  if (nb) {
+    nb.addEventListener('click', function() { goTo(cur + 1); });
+    nb.addEventListener('touchend', function(e) { e.preventDefault(); goTo(cur + 1); }, { passive: false });
+  }
+  if (pb) {
+    pb.addEventListener('click', function() { goTo(cur - 1); });
+    pb.addEventListener('touchend', function(e) { e.preventDefault(); goTo(cur - 1); }, { passive: false });
+  }
+
+  // Swipe support for iPhone
+  var touchStartX = 0;
+  track.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  track.addEventListener('touchend', function(e) {
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) goTo(cur + 1);
+      else goTo(cur - 1);
+    }
+  }, { passive: true });
+
   buildDots();
   window.addEventListener('resize', function() { buildDots(); goTo(0); });
 
@@ -198,10 +260,12 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') windo
 })();
 
 /* ─── CONTACT FORM — EmailJS ────────────────────────────────────
-   Service:  service_57k6qhf
-   Template → you:     template_70u9yvd
-   Template → sender:  template_iarwp0d
-   Public Key:         2WkxcVwk1FHP0Sgyh
+   Template template_70u9yvd expects {{email}} (the original field
+   name from the Gemini site). Field is name="email" in the HTML.
+   Public Key:  2WkxcVwk1FHP0Sgyh
+   Service:     service_57k6qhf
+   To you:      template_70u9yvd
+   To sender:   template_iarwp0d
 ────────────────────────────────────────────────────────────────*/
 document.addEventListener('DOMContentLoaded', function() {
   var s = document.createElement('script');
@@ -216,9 +280,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    var userEmail = (form.querySelector('#f-email') || {}).value;
-    if (!userEmail || !userEmail.trim()) return;
-    userEmail = userEmail.trim();
+    var emailInput = form.querySelector('[name="email"]') || form.querySelector('#f-email');
+    var userEmail = emailInput ? emailInput.value.trim() : '';
+    if (!userEmail) return;
+
     if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
     emailjs.sendForm('service_57k6qhf', 'template_70u9yvd', form)
